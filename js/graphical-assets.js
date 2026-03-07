@@ -30,14 +30,47 @@
     gnome:    "/static/img/tiles/standard_rpg/portrait_mage.png",  // inventive/arcane
   };
 
-  // Hybrid: use first parent portrait
+  // Hybrid portraits — dedicated image for each combination
+  const HYBRID_PORTRAIT_MAP = {
+    "dwarf-elf":        "/static/img/tiles/standard_rpg/hybrid_dwarf-elf.png",
+    "dwarf-human":      "/static/img/tiles/standard_rpg/hybrid_dwarf-human.png",
+    "elf-human":        "/static/img/tiles/standard_rpg/hybrid_elf-human.png",
+    "human-orc":        "/static/img/tiles/standard_rpg/hybrid_human-orc.png",
+    "elf-orc":          "/static/img/tiles/standard_rpg/hybrid_elf-orc.png",
+    "halfling-human":   "/static/img/tiles/standard_rpg/hybrid_halfling-human.png",
+    "dwarf-halfling":   "/static/img/tiles/standard_rpg/hybrid_dwarf-halfling.png",
+    "halfling-orc":     "/static/img/tiles/standard_rpg/hybrid_halfling-orc.png",
+    "gnome-human":      "/static/img/tiles/standard_rpg/hybrid_gnome-human.png",
+    "elf-gnome":        "/static/img/tiles/standard_rpg/hybrid_elf-gnome.png",
+    "dwarf-gnome":      "/static/img/tiles/standard_rpg/hybrid_dwarf-gnome.png",
+    "gnome-halfling":   "/static/img/tiles/standard_rpg/hybrid_gnome-halfling.png",
+    "gnome-orc":        "/static/img/tiles/standard_rpg/hybrid_gnome-orc.png",
+    "elf-halfling":     "/static/img/tiles/standard_rpg/hybrid_elf-halfling.png",
+    "elf-tiefling":     "/static/img/tiles/standard_rpg/hybrid_elf-tiefling.png",
+    "human-tiefling":   "/static/img/tiles/standard_rpg/hybrid_human-tiefling.png",
+    "dwarf-tiefling":   "/static/img/tiles/standard_rpg/hybrid_dwarf-tiefling.png",
+    "halfling-tiefling":"/static/img/tiles/standard_rpg/hybrid_halfling-tiefling.png",
+    "gnome-tiefling":   "/static/img/tiles/standard_rpg/hybrid_gnome-tiefling.png",
+    "orc-tiefling":     "/static/img/tiles/standard_rpg/hybrid_orc-tiefling.png",
+    "dwarf-orc":        "/static/img/tiles/standard_rpg/hybrid_dwarf-orc.png",
+  };
+
   function getPortraitForCode(code) {
     if (!code) return null;
     const clean = code.toLowerCase().trim();
+    // Dedicated hybrid portrait first
+    if (HYBRID_PORTRAIT_MAP[clean]) return HYBRID_PORTRAIT_MAP[clean];
+    // Base race portrait
     if (PORTRAIT_MAP[clean]) return PORTRAIT_MAP[clean];
-    // Hybrid: "dwarf-elf" -> use dwarf portrait
-    const first = clean.split("-")[0];
-    return PORTRAIT_MAP[first] || null;
+    // Hybrid fallback: normalise order and try again (e.g. "orc-elf" -> "elf-orc")
+    if (clean.includes("-")) {
+      const parts = clean.split("-").sort();
+      const normalised = parts.join("-");
+      if (HYBRID_PORTRAIT_MAP[normalised]) return HYBRID_PORTRAIT_MAP[normalised];
+      // Last resort: first parent base portrait
+      return PORTRAIT_MAP[parts[0]] || null;
+    }
+    return null;
   }
 
   // ============================================================
