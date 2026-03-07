@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TEN RINGS -- Asset Preview</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #1a1208; color: #e8d5a0; font-family: Georgia, serif; padding: 20px; }
+  h1 { text-align: center; font-size: 1.8em; color: #f0c060; margin-bottom: 4px; letter-spacing: 2px; }
+  .subtitle { text-align: center; color: #a08040; margin-bottom: 28px; font-style: italic; font-size: 0.9em; }
+  .section { margin-bottom: 40px; }
+  .section-title { font-size: 1.2em; color: #f0c060; border-bottom: 1px solid #5a4020; padding-bottom: 8px; margin-bottom: 16px; }
+  .section-title span { color: #a08040; font-size: 0.78em; font-style: italic; margin-left: 8px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+  .grid-portraits { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+  .card { background: #2a1e0a; border: 2px solid #5a4020; border-radius: 6px; overflow: hidden; cursor: pointer; transition: border-color 0.15s; }
+  .card:hover { border-color: #f0c060; }
+  .card img { width: 100%; display: block; background: #111; }
+  .card img.portrait { aspect-ratio: 1/1; object-fit: cover; object-position: top; }
+  .card img.sheet { aspect-ratio: 16/9; object-fit: contain; background: #0a0a0a; }
+  .card img.sprite { aspect-ratio: 4/3; object-fit: contain; background: #0a0a0a; }
+  .card-label { padding: 7px 12px; font-size: 0.82em; color: #c0a060; display: flex; justify-content: space-between; }
+  .tag { font-size: 0.72em; background: #3a2a0a; border: 1px solid #5a4020; padding: 1px 7px; border-radius: 8px; color: #a08040; }
+
+  #lb { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 100; align-items: center; justify-content: center; flex-direction: column; padding: 20px; }
+  #lb.open { display: flex; }
+  #lb img { max-width: 95vw; max-height: 85vh; border: 2px solid #5a4020; }
+  #lb-cap { color: #c0a060; margin-top: 10px; font-style: italic; }
+  #lb-x { position: fixed; top: 16px; right: 22px; font-size: 2.2em; color: #f0c060; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<h1>TEN RINGS -- standard_rpg Assets</h1>
+<p class="subtitle">Click any image to view full size. All assets generated for the graphical conversion.</p>
+
+<div class="section">
+  <div class="section-title">Style Anchor <span>the visual reference for all tiles</span></div>
+  <div class="grid">
+    <div class="card" onclick="lb('img/tiles/standard_rpg/00_style_anchor.png','Style anchor scene')">
+      <img class="sheet" src="img/tiles/standard_rpg/00_style_anchor.png" loading="lazy">
+      <div class="card-label">00_style_anchor.png <span class="tag">REFERENCE</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Ground Tiles <span>grass, paths, water</span></div>
+  <div class="grid">
+    <div class="card" onclick="lb('img/tiles/standard_rpg/01_ground_grass.png','Grass tile variants')">
+      <img class="sheet" src="img/tiles/standard_rpg/01_ground_grass.png" loading="lazy">
+      <div class="card-label">01_ground_grass.png <span class="tag">GROUND</span></div>
+    </div>
+    <div class="card" onclick="lb('img/tiles/standard_rpg/02_ground_paths.png','Dirt paths and stone')">
+      <img class="sheet" src="img/tiles/standard_rpg/02_ground_paths.png" loading="lazy">
+      <div class="card-label">02_ground_paths.png <span class="tag">GROUND</span></div>
+    </div>
+    <div class="card" onclick="lb('img/tiles/standard_rpg/03_ground_water.png','Water and shoreline')">
+      <img class="sheet" src="img/tiles/standard_rpg/03_ground_water.png" loading="lazy">
+      <div class="card-label">03_ground_water.png <span class="tag">GROUND</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Terrain Features <span>trees, rocks, cliffs</span></div>
+  <div class="grid">
+    <div class="card" onclick="lb('img/tiles/standard_rpg/04_trees_nature.png','Trees and bushes')">
+      <img class="sheet" src="img/tiles/standard_rpg/04_trees_nature.png" loading="lazy">
+      <div class="card-label">04_trees_nature.png <span class="tag">TERRAIN</span></div>
+    </div>
+    <div class="card" onclick="lb('img/tiles/standard_rpg/05_rocks_cliffs.png','Rocks and cliff faces')">
+      <img class="sheet" src="img/tiles/standard_rpg/05_rocks_cliffs.png" loading="lazy">
+      <div class="card-label">05_rocks_cliffs.png <span class="tag">TERRAIN</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Buildings <span>village, town, objects</span></div>
+  <div class="grid">
+    <div class="card" onclick="lb('img/tiles/standard_rpg/06_buildings_village.png','Village buildings')">
+      <img class="sheet" src="img/tiles/standard_rpg/06_buildings_village.png" loading="lazy">
+      <div class="card-label">06_buildings_village.png <span class="tag">BUILDING</span></div>
+    </div>
+    <div class="card" onclick="lb('img/tiles/standard_rpg/07_buildings_town.png','Town buildings')">
+      <img class="sheet" src="img/tiles/standard_rpg/07_buildings_town.png" loading="lazy">
+      <div class="card-label">07_buildings_town.png <span class="tag">BUILDING</span></div>
+    </div>
+    <div class="card" onclick="lb('img/tiles/standard_rpg/08_town_objects.png','Town objects')">
+      <img class="sheet" src="img/tiles/standard_rpg/08_town_objects.png" loading="lazy">
+      <div class="card-label">08_town_objects.png <span class="tag">OBJECTS</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Interiors <span>floors, walls, furniture</span></div>
+  <div class="grid">
+    <div class="card" onclick="lb('img/tiles/standard_rpg/09_interior_floors.png','Interior floors and walls')">
+      <img class="sheet" src="img/tiles/standard_rpg/09_interior_floors.png" loading="lazy">
+      <div class="card-label">09_interior_floors.png <span class="tag">INTERIOR</span></div>
+    </div>
+    <div class="card" onclick="lb('img/tiles/standard_rpg/10_interior_objects.png','Interior objects')">
+      <img class="sheet" src="img/tiles/standard_rpg/10_interior_objects.png" loading="lazy">
+      <div class="card-label">10_interior_objects.png <span class="tag">INTERIOR</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Character Portraits <span>playable races</span></div>
+  <div class="grid-portraits">
+    <div class="card" onclick="lb('img/tiles/standard_rpg/portrait_human.png','Human warrior')">
+      <img class="portrait" src="img/tiles/standard_rpg/portrait_human.png" loading="lazy">
+      <div class="card-label">Human <span class="tag">PORTRAIT</span></div>
+    </div>
+    <div class="card" onclick="lb('img/tiles/standard_rpg/portrait_dwarf.png','Dwarf warrior')">
+      <img class="portrait" src="img/tiles/standard_rpg/portrait_dwarf.png" loading="lazy">
+      <div class="card-label">Dwarf <span class="tag">PORTRAIT</span></div>
+    </div>
+    <div class="card" onclick="lb('img/tiles/standard_rpg/portrait_elf.png','Elf')">
+      <img class="portrait" src="img/tiles/standard_rpg/portrait_elf.png" loading="lazy">
+      <div class="card-label">Elf <span class="tag">PORTRAIT</span></div>
+    </div>
+    <div class="card" onclick="lb('img/tiles/standard_rpg/portrait_orc.png','Orc warrior')">
+      <img class="portrait" src="img/tiles/standard_rpg/portrait_orc.png" loading="lazy">
+      <div class="card-label">Orc <span class="tag">PORTRAIT</span></div>
+    </div>
+    <div class="card" onclick="lb('img/tiles/standard_rpg/portrait_rogue.png','Rogue')">
+      <img class="portrait" src="img/tiles/standard_rpg/portrait_rogue.png" loading="lazy">
+      <div class="card-label">Rogue <span class="tag">PORTRAIT</span></div>
+    </div>
+    <div class="card" onclick="lb('img/tiles/standard_rpg/portrait_mage.png','Mage')">
+      <img class="portrait" src="img/tiles/standard_rpg/portrait_mage.png" loading="lazy">
+      <div class="card-label">Mage <span class="tag">PORTRAIT</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Character Sprites <span>player and NPCs</span></div>
+  <div class="grid">
+    <div class="card" onclick="lb('img/tiles/standard_rpg/sprite_player.png','Player sprite sheet')">
+      <img class="sprite" src="img/tiles/standard_rpg/sprite_player.png" loading="lazy">
+      <div class="card-label">sprite_player.png <span class="tag">SPRITE</span></div>
+    </div>
+    <div class="card" onclick="lb('img/tiles/standard_rpg/sprite_npcs.png','NPC sprites')">
+      <img class="sprite" src="img/tiles/standard_rpg/sprite_npcs.png" loading="lazy">
+      <div class="card-label">sprite_npcs.png <span class="tag">SPRITE</span></div>
+    </div>
+  </div>
+</div>
+
+<div id="lb" onclick="this.classList.remove('open')">
+  <span id="lb-x" onclick="document.getElementById('lb').classList.remove('open')">x</span>
+  <img id="lb-img" src="" alt="">
+  <div id="lb-cap"></div>
+</div>
+
+<script>
+function lb(src, cap) {
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lb-cap').textContent = cap;
+  document.getElementById('lb').classList.add('open');
+}
+document.addEventListener('keydown', e => { if(e.key==='Escape') document.getElementById('lb').classList.remove('open'); });
+</script>
+</body>
+</html>
