@@ -738,8 +738,11 @@ const PORTRAITS = [
   ["portrait_dwarf.png","Dwarf","BASE"],
   ["portrait_elf.png","Elf","BASE"],
   ["portrait_orc.png","Orc","BASE"],
-  ["portrait_rogue.png","Rogue/Halfling/Tiefling","BASE"],
-  ["portrait_mage.png","Mage/Gnome","BASE"],
+  ["portrait_halfling.png","Halfling","BASE"],
+  ["portrait_tiefling.png","Tiefling","BASE"],
+  ["portrait_gnome.png","Gnome","BASE"],
+  ["portrait_rogue.png","Rogue (Class)","CLASS"],
+  ["portrait_mage.png","Mage (Class)","CLASS"],
 ];
 
 const TILES = [
@@ -762,9 +765,9 @@ const BASE_RACES = [
   { code:"dwarf",    name:"Dwarf",    file:"portrait_dwarf.png" },
   { code:"elf",      name:"Elf",      file:"portrait_elf.png" },
   { code:"orc",      name:"Orc",      file:"portrait_orc.png" },
-  { code:"halfling", name:"Halfling", file:"portrait_rogue.png" },
-  { code:"gnome",    name:"Gnome",    file:"portrait_mage.png" },
-  { code:"tiefling", name:"Tiefling", file:"portrait_rogue.png" },
+  { code:"halfling", name:"Halfling", file:"portrait_halfling.png" },
+  { code:"gnome",    name:"Gnome",    file:"portrait_gnome.png" },
+  { code:"tiefling", name:"Tiefling", file:"portrait_tiefling.png" },
 ];
 
 const HYBRID_RACES = [
@@ -792,8 +795,16 @@ const HYBRID_RACES = [
 ];
 
 function getPortrait(code) {
-  const m = BASE_RACES.find(r => r.code === code);
-  return m ? `img/tiles/standard_rpg/${m.file}` : "";
+  const map = {
+    human: "portrait_human.png",
+    dwarf: "portrait_dwarf.png",
+    elf: "portrait_elf.png",
+    orc: "portrait_orc.png",
+    halfling: "portrait_halfling.png",
+    tiefling: "portrait_tiefling.png",
+    gnome: "portrait_gnome.png",
+  };
+  return map[code] ? `img/tiles/standard_rpg/${map[code]}` : "";
 }
 
 function lb(src, cap) {
