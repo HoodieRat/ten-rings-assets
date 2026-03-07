@@ -713,8 +713,11 @@ body {
 <!-- ============================================================ -->
 <!-- SECTION 3: PORTRAITS -->
 <!-- ============================================================ -->
-<div class="section-label">Character Portraits</div>
+<div class="section-label">Base Race Portraits</div>
 <div class="portrait-strip" id="portrait-strip"></div>
+
+<div class="section-label">Hybrid Portraits (21 combinations)</div>
+<div class="portrait-strip" id="hybrid-portrait-strip"></div>
 
 <!-- ============================================================ -->
 <!-- SECTION 4: TILE SHEETS -->
@@ -853,6 +856,20 @@ PORTRAITS.forEach(([file, name, tag]) => {
     <div class="portrait-card-label">${name} <span class="ptag">${tag}</span></div>
   `;
   portStrip.appendChild(card);
+});
+
+// Build hybrid portrait strip
+const hybridPortStrip = document.getElementById("hybrid-portrait-strip");
+HYBRID_RACES.forEach(h => {
+  const file = `hybrid_${h.code}.png`;
+  const card = document.createElement("div");
+  card.className = "portrait-card";
+  card.onclick = () => lb(`img/tiles/standard_rpg/${file}`, h.name);
+  card.innerHTML = `
+    <img src="img/tiles/standard_rpg/${file}" alt="${h.name}" loading="lazy">
+    <div class="portrait-card-label">${h.name} <span class="ptag">HYBRID</span></div>
+  `;
+  hybridPortStrip.appendChild(card);
 });
 
 // Build tile strip
