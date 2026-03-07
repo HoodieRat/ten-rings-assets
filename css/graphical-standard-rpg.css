@@ -1,0 +1,388 @@
+/*
+ * graphical-standard-rpg.css
+ * Graphical assets wired into the TEN RINGS UI for standard_rpg template.
+ * Painterly 3/4-perspective JRPG aesthetic.
+ * PC-first: designed at 1920x1080, mobile secondary.
+ *
+ * HOW THIS WORKS:
+ * - CSS custom properties set asset paths per template
+ * - body[data-world-template="standard_rpg"] selectors apply assets
+ * - JavaScript sets the body attribute on game start / world load
+ * - No existing layout or logic is modified — only visual layer added
+ */
+
+/* ==========================================================
+   ASSET PATHS
+   ========================================================== */
+:root {
+  --tile-base: /static/img/tiles/standard_rpg;
+}
+
+/* ==========================================================
+   GLOBAL PARCHMENT BODY BACKGROUND
+   Applied whenever the player is in-game (not menus)
+   ========================================================== */
+body[data-world-template="standard_rpg"].screen-game {
+  background-color: #1a1208;
+}
+
+/* ==========================================================
+   NARRATIVE PANEL — tile-textured story surface
+   Replace the flat parchment with the grass/path tile feel
+   ========================================================== */
+body[data-world-template="standard_rpg"] .hud-story {
+  position: relative;
+  overflow: hidden;
+}
+
+body[data-world-template="standard_rpg"] .hud-story::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url(/static/img/tiles/standard_rpg/01_ground_grass.png);
+  background-size: 480px auto;
+  background-repeat: repeat;
+  opacity: 0.07;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: inherit;
+}
+
+body[data-world-template="standard_rpg"] .hud-story .chronicle {
+  position: relative;
+  z-index: 1;
+}
+
+/* ==========================================================
+   HUD LEFT STRIP — cobblestone texture
+   ========================================================== */
+body[data-world-template="standard_rpg"] .hud-left {
+  position: relative;
+  overflow: visible;
+}
+
+body[data-world-template="standard_rpg"] .hud-left::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url(/static/img/tiles/standard_rpg/02_ground_paths.png);
+  background-size: 320px auto;
+  background-repeat: repeat;
+  opacity: 0.06;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: inherit;
+}
+
+/* ==========================================================
+   CHARACTER CREATION — portrait watermark per race
+   The race-grid labels get a subtle portrait background
+   via JS (graphical-assets.js handles this dynamically)
+   ========================================================== */
+
+/* Race grid tile sizing */
+body[data-world-template="standard_rpg"] #hero-races {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+body[data-world-template="standard_rpg"] #hero-races label {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 8px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  background: rgba(40, 28, 12, 0.7);
+}
+
+body[data-world-template="standard_rpg"] #hero-races label:hover {
+  border-color: rgba(180, 130, 60, 0.7);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+}
+
+body[data-world-template="standard_rpg"] #hero-races label.race-selected {
+  border-color: #d4a855;
+  box-shadow: 0 0 0 3px rgba(212, 168, 85, 0.3), 0 4px 16px rgba(0,0,0,0.4);
+}
+
+/* Portrait background layer on each race tile */
+body[data-world-template="standard_rpg"] #hero-races label .race-portrait-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center top;
+  opacity: 0.55;
+  border-radius: inherit;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+body[data-world-template="standard_rpg"] #hero-races label:hover .race-portrait-bg,
+body[data-world-template="standard_rpg"] #hero-races label.race-selected .race-portrait-bg {
+  opacity: 0.75;
+}
+
+/* Race name label on top of portrait */
+body[data-world-template="standard_rpg"] #hero-races label span:not(.race-portrait-bg) {
+  position: relative;
+  z-index: 2;
+  font-size: 0.82em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #f5e6c8;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.85), 0 0 8px rgba(0,0,0,0.6);
+  padding: 2px 6px;
+  background: rgba(0,0,0,0.45);
+  border-radius: 4px;
+}
+
+body[data-world-template="standard_rpg"] #hero-races label input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* ==========================================================
+   CHARACTER CREATION SCREEN BACKGROUND
+   ========================================================== */
+body[data-world-template="standard_rpg"] #create-screen {
+  position: relative;
+}
+
+body[data-world-template="standard_rpg"] #create-screen::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    url(/static/img/tiles/standard_rpg/04_trees_nature.png),
+    url(/static/img/tiles/standard_rpg/01_ground_grass.png);
+  background-size: 600px auto, 400px auto;
+  background-position: top right, top left;
+  background-repeat: no-repeat, repeat;
+  opacity: 0.08;
+  pointer-events: none;
+  z-index: 0;
+}
+
+body[data-world-template="standard_rpg"] #create-screen .create-surface {
+  position: relative;
+  z-index: 1;
+}
+
+/* ==========================================================
+   SHOPKEEPER PORTRAIT
+   Show an NPC from sprite_npcs depending on shop type
+   JS sets data-shop-type attribute on the portrait element
+   ========================================================== */
+body[data-world-template="standard_rpg"] .shopkeeper-portrait {
+  width: 120px !important;
+  height: 120px !important;
+  border-radius: 50% !important;
+  background-image: url(/static/img/tiles/standard_rpg/sprite_npcs.png) !important;
+  background-size: 480px auto !important;
+  background-position: -120px 0px !important; /* merchant column */
+  background-repeat: no-repeat !important;
+  image-rendering: pixelated;
+  border: 3px solid rgba(120, 84, 42, 0.8) !important;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.25), 0 4px 12px rgba(0,0,0,0.3) !important;
+  overflow: hidden;
+}
+
+/* Blacksmith */
+body[data-world-template="standard_rpg"] .shopkeeper-portrait[data-shop-type="blacksmith"] {
+  background-position: 0px 0px !important; /* villager column */
+}
+
+/* Weapon shop */
+body[data-world-template="standard_rpg"] .shopkeeper-portrait[data-shop-type="weapon"] {
+  background-position: -360px 0px !important; /* guard column */
+}
+
+/* General/apothecary */
+body[data-world-template="standard_rpg"] .shopkeeper-portrait[data-shop-type="apothecary"],
+body[data-world-template="standard_rpg"] .shopkeeper-portrait[data-shop-type="general"] {
+  background-position: -120px 0px !important; /* merchant */
+}
+
+/* ==========================================================
+   WORLD MAP OVERLAY — style the parchment overlay border
+   ========================================================== */
+body[data-world-template="standard_rpg"] .map-overlay-surface--world {
+  border: 4px solid rgba(140, 100, 50, 0.6);
+  box-shadow: 0 0 60px rgba(0,0,0,0.7), inset 0 0 40px rgba(80, 50, 20, 0.25);
+}
+
+/* ==========================================================
+   BUILDINGS PANEL — right column world panel decorative header
+   ========================================================== */
+body[data-world-template="standard_rpg"] .tab-panel[data-panel="world"] .card:first-child {
+  position: relative;
+  overflow: hidden;
+}
+
+body[data-world-template="standard_rpg"] .tab-panel[data-panel="world"] .card:first-child::before {
+  content: "";
+  position: absolute;
+  top: 0; right: 0;
+  width: 140px;
+  height: 90px;
+  background-image: url(/static/img/tiles/standard_rpg/06_buildings_village.png);
+  background-size: cover;
+  background-position: top left;
+  opacity: 0.18;
+  pointer-events: none;
+  border-radius: 0 6px 0 0;
+  mask-image: linear-gradient(to left, rgba(0,0,0,0.9), transparent);
+  -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,0.9), transparent);
+}
+
+/* ==========================================================
+   IN-GAME HEADER — subtle terrain watermark
+   ========================================================== */
+body[data-world-template="standard_rpg"].screen-game .hud-center-header .top-bar {
+  position: relative;
+  overflow: hidden;
+}
+
+body[data-world-template="standard_rpg"].screen-game .hud-center-header .top-bar::after {
+  content: "";
+  position: absolute;
+  right: 0; top: 0; bottom: 0;
+  width: 200px;
+  background-image: url(/static/img/tiles/standard_rpg/05_rocks_cliffs.png);
+  background-size: 320px auto;
+  background-position: right center;
+  background-repeat: no-repeat;
+  opacity: 0.05;
+  pointer-events: none;
+}
+
+/* ==========================================================
+   ACTION DOCK — subtle stone floor texture
+   ========================================================== */
+body[data-world-template="standard_rpg"].screen-game .hud-center-footer .action-dock {
+  position: relative;
+  overflow: hidden;
+}
+
+body[data-world-template="standard_rpg"].screen-game .hud-center-footer .action-dock::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url(/static/img/tiles/standard_rpg/09_interior_floors.png);
+  background-size: 400px auto;
+  background-repeat: repeat;
+  opacity: 0.045;
+  pointer-events: none;
+}
+
+/* ==========================================================
+   PORTRAIT DISPLAY — character sheet / identity card
+   Injected by JS when rendering race cards in game
+   ========================================================== */
+.race-portrait-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  object-position: center top;
+  border-radius: 8px 8px 0 0;
+  display: block;
+  border-bottom: 2px solid rgba(120, 84, 42, 0.5);
+}
+
+.race-identity-card.with-portrait {
+  overflow: hidden;
+  padding-top: 0;
+}
+
+.race-identity-card.with-portrait .race-identity-header {
+  padding-top: 12px;
+}
+
+/* ==========================================================
+   NPC CRIER / TOWN CRIER PORTRAIT
+   ========================================================== */
+body[data-world-template="standard_rpg"] .crier-portrait {
+  background-image: url(/static/img/tiles/standard_rpg/sprite_npcs.png) !important;
+  background-size: 480px auto !important;
+  background-position: -360px 0px !important; /* guard column */
+  background-repeat: no-repeat !important;
+  image-rendering: pixelated;
+}
+
+/* ==========================================================
+   GUARD PORTRAIT
+   ========================================================== */
+body[data-world-template="standard_rpg"] .guard-portrait {
+  background-image: url(/static/img/tiles/standard_rpg/sprite_npcs.png) !important;
+  background-size: 480px auto !important;
+  background-position: -360px 0px !important;
+  background-repeat: no-repeat !important;
+  image-rendering: pixelated;
+}
+
+/* ==========================================================
+   MENU SCREEN — full graphical treatment
+   ========================================================== */
+body[data-world-template="standard_rpg"] #menu-screen {
+  position: relative;
+}
+
+body[data-world-template="standard_rpg"] #menu-screen::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    url(/static/img/tiles/standard_rpg/06_buildings_village.png),
+    url(/static/img/tiles/standard_rpg/01_ground_grass.png);
+  background-size: 700px auto, 500px auto;
+  background-position: 80% 60%, center center;
+  background-repeat: no-repeat, repeat;
+  opacity: 0.06;
+  pointer-events: none;
+  z-index: 0;
+}
+
+body[data-world-template="standard_rpg"] #menu-screen .menu-surface {
+  position: relative;
+  z-index: 1;
+}
+
+/* ==========================================================
+   RING LEVEL HUD — add stone ring glow effect
+   ========================================================== */
+body[data-world-template="standard_rpg"] .ring-level-hud {
+  position: relative;
+}
+
+body[data-world-template="standard_rpg"] .ring-level-hud::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  background-image: url(/static/img/tiles/standard_rpg/05_rocks_cliffs.png);
+  background-size: 160px auto;
+  background-position: center;
+  opacity: 0.12;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* ==========================================================
+   SMOOTH IMAGE RENDERING for tile sheets used as backgrounds
+   ========================================================== */
+body[data-world-template="standard_rpg"] .hud-story::before,
+body[data-world-template="standard_rpg"] .hud-left::before,
+body[data-world-template="standard_rpg"] #create-screen::before,
+body[data-world-template="standard_rpg"] .hud-center-footer .action-dock::before {
+  image-rendering: auto;
+}
