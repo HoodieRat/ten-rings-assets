@@ -25,9 +25,9 @@
     dwarf:    "/static/img/tiles/standard_rpg/portrait_dwarf.png",
     elf:      "/static/img/tiles/standard_rpg/portrait_elf.png",
     orc:      "/static/img/tiles/standard_rpg/portrait_orc.png",
-    tiefling: "/static/img/tiles/standard_rpg/portrait_rogue.png", // closest match
-    halfling: "/static/img/tiles/standard_rpg/portrait_rogue.png", // nimble/rogue energy
-    gnome:    "/static/img/tiles/standard_rpg/portrait_mage.png",  // inventive/arcane
+    tiefling: "/static/img/tiles/standard_rpg/portrait_tiefling.png",
+    halfling: "/static/img/tiles/standard_rpg/portrait_halfling.png",
+    gnome:    "/static/img/tiles/standard_rpg/portrait_gnome.png",
   };
 
   // Hybrid portraits — dedicated image for each combination
