@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TEN RINGS -- UI Preview</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --parchment: #f5e6c8;
+  --ink: #3a2b1a;
+  --gold: #c8952a;
+  --gold-light: #f0c060;
+  --dark-bg: #1a1208;
+  --panel-bg: rgba(252,240,214,0.92);
+  --panel-border: rgba(140,100,50,0.45);
+  --shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+body {
+  background: #0e0b06;
+  color: #e8d5a0;
+  font-family: Georgia, 'Times New Roman', serif;
+  min-height: 100vh;
+}
+
+/* ── PAGE HEADER ── */
+.page-header {
+  background: linear-gradient(180deg, #1a1208, #0e0b06);
+  border-bottom: 2px solid rgba(200,149,42,0.35);
+  padding: 18px 28px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.page-header h1 { font-size: 1.4em; color: #f0c060; letter-spacing: 2px; }
+.page-header .sub { font-size: 0.82em; color: #a08040; font-style: italic; }
+.badge { background: rgba(200,149,42,0.18); border: 1px solid rgba(200,149,42,0.4); border-radius: 12px; padding: 3px 10px; font-size: 0.75em; color: #d4a855; margin-left: auto; }
+
+/* ── SECTION LABELS ── */
+.section-label {
+  font-size: 0.72em;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #a08040;
+  padding: 24px 28px 8px;
+  border-top: 1px solid rgba(200,149,42,0.15);
+}
+.section-label:first-of-type { border-top: none; }
+
+/* ── SCREENSHOT WRAPPER ── */
+.screen-wrap {
+  padding: 20px 28px 28px;
+}
+.screen-label {
+  font-size: 0.8em;
+  color: #c0a060;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.screen-label::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(200,149,42,0.2);
+}
+
+/* ── SIMULATED GAME SCREENS ── */
+.sim-screen {
+  background: #1a1208;
+  border: 2px solid rgba(140,100,50,0.4);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+  max-width: 1100px;
+  position: relative;
+}
+
+/* Grass texture overlay */
+.sim-screen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url(img/tiles/standard_rpg/01_ground_grass.png);
+  background-size: 380px auto;
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── PARCHMENT PANEL ── */
+.parchment-panel {
+  background: var(--panel-bg);
+  background-image: url(img/tiles/standard_rpg/01_ground_grass.png);
+  background-blend-mode: multiply;
+  background-size: 320px;
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  color: var(--ink);
+  position: relative;
+  z-index: 1;
+}
+
+/* ── CHARACTER CREATION SCREEN ── */
+.create-screen-sim {
+  padding: 24px;
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.create-header {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--panel-border);
+}
+.create-header h2 { color: var(--ink); font-size: 1.6em; }
+.create-header p { color: #6a4c2d; font-size: 0.88em; margin-top: 4px; }
+
+.field-label {
+  font-size: 0.72em;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #6a4c2d;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+/* ── RACE GRID ── */
+.race-grid-sim {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.race-tile {
+  position: relative;
+  border-radius: 10px;
+  min-height: 110px;
+  overflow: hidden;
+  border: 2px solid rgba(120,84,42,0.35);
+  transition: border-color 0.15s, box-shadow 0.15s;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 8px;
+  background: rgba(40,28,12,0.7);
+}
+.race-tile:hover { border-color: rgba(180,130,60,0.7); }
+.race-tile.selected {
+  border-color: #d4a855;
+  box-shadow: 0 0 0 3px rgba(212,168,85,0.3);
+}
+
+.race-tile-portrait {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center top;
+  opacity: 0.6;
+  border-radius: inherit;
+}
+
+.race-tile-name {
+  position: relative;
+  z-index: 2;
+  font-size: 0.75em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #f5e6c8;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.7);
+  padding: 2px 7px;
+  background: rgba(0,0,0,0.5);
+  border-radius: 4px;
+}
+
+/* ── HYBRID TILES ── */
+.hybrid-section { margin-top: 16px; }
+.hybrid-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.hybrid-tile {
+  position: relative;
+  border-radius: 8px;
+  min-height: 90px;
+  overflow: hidden;
+  border: 1.5px solid rgba(120,84,42,0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 6px;
+  background: rgba(30,20,8,0.8);
+}
+
+.hybrid-portrait-left {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 55%;
+  background-size: cover;
+  background-position: center top;
+  opacity: 0.45;
+  clip-path: polygon(0 0, 80% 0, 100% 100%, 0 100%);
+}
+.hybrid-portrait-right {
+  position: absolute;
+  right: 0; top: 0; bottom: 0;
+  width: 55%;
+  background-size: cover;
+  background-position: center top;
+  opacity: 0.45;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 20% 100%);
+}
+.hybrid-blend {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 40%, rgba(0,0,0,0.3) 60%);
+}
+.hybrid-name {
+  position: relative;
+  z-index: 2;
+  font-size: 0.68em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #f5e6c8;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.9);
+  padding: 2px 5px;
+  background: rgba(0,0,0,0.55);
+  border-radius: 3px;
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* ── IN-GAME LAYOUT SIM ── */
+.game-layout-sim {
+  display: grid;
+  grid-template-columns: 54px 260px 1fr 300px;
+  grid-template-rows: 60px 1fr 80px;
+  gap: 6px;
+  padding: 8px;
+  height: 600px;
+  position: relative;
+  z-index: 1;
+}
+
+.hud-top-bar {
+  grid-column: 1 / -1;
+  background: rgba(252,240,214,0.08);
+  border: 1px solid rgba(140,100,50,0.3);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.hud-top-bar::after {
+  content: "";
+  position: absolute;
+  right: 0; top: 0; bottom: 0;
+  width: 180px;
+  background-image: url(img/tiles/standard_rpg/05_rocks_cliffs.png);
+  background-size: 280px auto;
+  background-position: right center;
+  opacity: 0.05;
+}
+.hud-title { color: #f0c060; font-size: 0.9em; letter-spacing: 1px; }
+.hud-stat { font-size: 0.72em; color: #c0a060; }
+.hud-stat span { color: #f5e6c8; }
+.ring-badge {
+  margin-left: auto;
+  background: rgba(200,149,42,0.2);
+  border: 1px solid rgba(200,149,42,0.5);
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-size: 0.72em;
+  color: #f0c060;
+  letter-spacing: 1px;
+}
+
+.hud-tab-strip {
+  grid-row: 2;
+  background: rgba(252,240,214,0.05);
+  border: 1px solid rgba(140,100,50,0.25);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 0;
+  gap: 4px;
+}
+.tab-icon {
+  width: 36px; height: 36px;
+  border-radius: 6px;
+  background: rgba(140,100,50,0.15);
+  border: 1px solid rgba(140,100,50,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.tab-icon:hover, .tab-icon.active { background: rgba(200,149,42,0.3); border-color: rgba(200,149,42,0.5); }
+
+.hud-drawer-panel {
+  grid-row: 2;
+  background: rgba(252,240,214,0.07);
+  border: 1px solid rgba(140,100,50,0.3);
+  border-radius: 6px;
+  padding: 12px;
+  overflow: hidden;
+  position: relative;
+}
+.hud-drawer-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url(img/tiles/standard_rpg/09_interior_floors.png);
+  background-size: 320px auto;
+  opacity: 0.04;
+  pointer-events: none;
+}
+.drawer-label { font-size: 0.68em; text-transform: uppercase; letter-spacing: 0.1em; color: #c0a060; margin-bottom: 8px; }
+.party-member {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px;
+  background: rgba(252,240,214,0.06);
+  border: 1px solid rgba(140,100,50,0.2);
+  border-radius: 6px;
+  margin-bottom: 6px;
+}
+.party-portrait {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center top;
+  border: 2px solid rgba(140,100,50,0.5);
+  flex-shrink: 0;
+}
+.party-info { font-size: 0.75em; }
+.party-info .pname { color: #f5e6c8; font-weight: 700; }
+.party-info .prace { color: #c0a060; }
+.hp-bar { height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; margin-top: 4px; }
+.hp-fill { height: 100%; background: linear-gradient(90deg, #5a9a3c, #8aca5a); border-radius: 2px; }
+
+.hud-narrative {
+  grid-row: 2;
+  background: rgba(252,240,214,0.06);
+  border: 1px solid rgba(140,100,50,0.3);
+  border-radius: 6px;
+  padding: 14px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.hud-narrative::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url(img/tiles/standard_rpg/01_ground_grass.png);
+  background-size: 380px auto;
+  opacity: 0.06;
+  pointer-events: none;
+}
+.narrative-header { font-size: 0.68em; text-transform: uppercase; letter-spacing: 0.12em; color: #c0a060; margin-bottom: 10px; }
+.narrative-entry {
+  font-size: 0.82em;
+  color: #e8d5a0;
+  line-height: 1.6;
+  padding: 8px 10px;
+  border-left: 2px solid rgba(200,149,42,0.35);
+  margin-bottom: 8px;
+  background: rgba(252,240,214,0.04);
+  border-radius: 0 4px 4px 0;
+  position: relative;
+  z-index: 1;
+}
+.narrative-entry.player { border-left-color: rgba(90,154,60,0.5); color: #c8e0b0; }
+.intent-bar-sim {
+  display: flex; gap: 8px; margin-top: auto; position: relative; z-index: 1;
+  padding-top: 10px;
+  border-top: 1px solid rgba(140,100,50,0.2);
+}
+.intent-input-sim {
+  flex: 1;
+  background: rgba(252,240,214,0.08);
+  border: 1px solid rgba(140,100,50,0.4);
+  border-radius: 6px;
+  padding: 7px 12px;
+  color: #f5e6c8;
+  font-size: 0.8em;
+  font-family: inherit;
+}
+.intent-send-sim {
+  background: rgba(200,149,42,0.25);
+  border: 1px solid rgba(200,149,42,0.5);
+  border-radius: 6px;
+  padding: 7px 14px;
+  color: #f0c060;
+  font-size: 0.8em;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.hud-right-panel {
+  grid-row: 2;
+  background: rgba(252,240,214,0.05);
+  border: 1px solid rgba(140,100,50,0.3);
+  border-radius: 6px;
+  padding: 12px;
+  overflow: hidden;
+  position: relative;
+}
+.hud-right-panel::before {
+  content: "";
+  position: absolute;
+  top: 0; right: 0;
+  width: 140px; height: 90px;
+  background-image: url(img/tiles/standard_rpg/06_buildings_village.png);
+  background-size: cover;
+  opacity: 0.15;
+  border-radius: 0 6px 0 0;
+  mask-image: linear-gradient(to left, rgba(0,0,0,0.9), transparent);
+  -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,0.9), transparent);
+  pointer-events: none;
+}
+.right-label { font-size: 0.68em; text-transform: uppercase; letter-spacing: 0.1em; color: #c0a060; margin-bottom: 8px; }
+.shop-keeper-area {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 12px;
+}
+.shopkeeper-sim {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background-image: url(img/tiles/standard_rpg/sprite_npcs.png);
+  background-size: 416px auto;
+  background-position: -104px 0;
+  border: 2px solid rgba(140,100,50,0.6);
+  flex-shrink: 0;
+  image-rendering: auto;
+}
+.shop-info { font-size: 0.78em; }
+.shop-info .sname { color: #f5e6c8; font-weight: 700; }
+.shop-info .srole { color: #c0a060; }
+.nearby-item {
+  font-size: 0.75em;
+  color: #c0a060;
+  padding: 5px 8px;
+  border-radius: 4px;
+  background: rgba(252,240,214,0.05);
+  border: 1px solid rgba(140,100,50,0.15);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nearby-icon { font-size: 1em; }
+
+.hud-dock {
+  grid-column: 1 / -1;
+  background: rgba(252,240,214,0.05);
+  border: 1px solid rgba(140,100,50,0.25);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  padding: 8px 14px;
+  gap: 8px;
+  position: relative;
+  overflow: hidden;
+}
+.hud-dock::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url(img/tiles/standard_rpg/09_interior_floors.png);
+  background-size: 380px auto;
+  opacity: 0.04;
+  pointer-events: none;
+}
+.hotbar-slot-sim {
+  width: 38px; height: 38px;
+  background: rgba(252,240,214,0.06);
+  border: 1px solid rgba(140,100,50,0.25);
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65em;
+  color: rgba(200,160,80,0.5);
+  flex-shrink: 0;
+}
+.end-turn-btn-sim {
+  margin-left: auto;
+  background: rgba(200,149,42,0.2);
+  border: 1px solid rgba(200,149,42,0.4);
+  border-radius: 6px;
+  padding: 8px 18px;
+  color: #f0c060;
+  font-size: 0.82em;
+  font-family: inherit;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── LIGHTBOX ── */
+#lb { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:9999; align-items:center; justify-content:center; flex-direction:column; padding:20px; }
+#lb.open { display:flex; }
+#lb img { max-width:95vw; max-height:85vh; border:2px solid rgba(140,100,50,0.5); border-radius:4px; }
+#lb-x { position:fixed; top:16px; right:20px; font-size:2em; color:#f0c060; cursor:pointer; z-index:10000; }
+#lb-cap { color:#c0a060; margin-top:10px; font-style:italic; font-size:0.88em; }
+
+/* ── PORTRAIT STRIP ── */
+.portrait-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 14px;
+  padding: 20px 28px;
+}
+.portrait-card {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 2px solid rgba(140,100,50,0.35);
+  background: rgba(30,20,8,0.6);
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.12s;
+}
+.portrait-card:hover { border-color: #d4a855; transform: translateY(-2px); }
+.portrait-card img { width:100%; height:200px; object-fit:cover; object-position:center top; display:block; }
+.portrait-card-label { padding:6px 10px; font-size:0.75em; color:#c0a060; text-transform:uppercase; letter-spacing:0.08em; display:flex; justify-content:space-between; align-items:center; }
+.ptag { font-size:0.72em; background:rgba(200,149,42,0.12); border:1px solid rgba(200,149,42,0.3); padding:1px 6px; border-radius:8px; }
+
+/* ── TILE SHEET STRIP ── */
+.tile-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
+  padding: 0 28px 28px;
+}
+.tile-card {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid rgba(140,100,50,0.3);
+  background: #0a0a08;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.tile-card:hover { border-color: rgba(200,149,42,0.6); }
+.tile-card img { width:100%; aspect-ratio:16/9; object-fit:contain; display:block; padding:6px; }
+.tile-card-label { padding:5px 10px; font-size:0.72em; color:#a08040; text-transform:uppercase; letter-spacing:0.06em; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div>
+    <h1>TEN RINGS: A THOUSAND PATHS</h1>
+    <p class="sub">standard_rpg template -- graphical UI preview</p>
+  </div>
+  <span class="badge">standard_rpg v1</span>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 1: CHARACTER CREATION SCREEN -->
+<!-- ============================================================ -->
+<div class="section-label">Character Creation Screen</div>
+<div class="screen-wrap">
+  <div class="screen-label">Race selection with portrait tiles</div>
+  <div class="sim-screen">
+    <div class="create-screen-sim parchment-panel" style="background-color:#f8f0dc;">
+      <div class="create-header">
+        <h2>Create Your Character</h2>
+        <p>Choose a name, race, class, then shape your stats.</p>
+      </div>
+
+      <div>
+        <div class="field-label">Races (choose up to two)</div>
+        <div class="race-grid-sim" id="race-grid"></div>
+
+        <div class="hybrid-section">
+          <div class="field-label" style="margin-top:16px;">Hybrid Combinations (available after picking two races)</div>
+          <div class="hybrid-grid" id="hybrid-grid"></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="field-label">Character Name</div>
+        <div style="background:rgba(140,100,50,0.12);border:1px solid rgba(140,100,50,0.3);border-radius:6px;padding:8px 12px;color:#3a2b1a;font-size:0.88em;margin-bottom:14px;">Kael Thornvast</div>
+        <div class="field-label">Class</div>
+        <div style="background:rgba(140,100,50,0.12);border:1px solid rgba(140,100,50,0.3);border-radius:6px;padding:8px 12px;color:#3a2b1a;font-size:0.88em;">Ranger</div>
+        <div style="margin-top:16px;padding:10px;background:rgba(200,149,42,0.08);border:1px solid rgba(200,149,42,0.25);border-radius:8px;font-size:0.78em;color:#6a4c2d;line-height:1.5;">
+          <strong>Ranger</strong><br>A skilled hunter and tracker who thrives in the wilderness, commanding beasts and reading the land.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 2: IN-GAME LAYOUT -->
+<!-- ============================================================ -->
+<div class="section-label">In-Game Layout</div>
+<div class="screen-wrap">
+  <div class="screen-label">Full game HUD with assets applied</div>
+  <div class="sim-screen">
+    <div class="game-layout-sim">
+
+      <div class="hud-top-bar">
+        <span class="hud-title">TEN RINGS: A THOUSAND PATHS</span>
+        <span class="hud-stat">Location: <span>Thornwall Village</span></span>
+        <span class="hud-stat">Moment: <span>14</span></span>
+        <span class="hud-stat">Level: <span>3</span></span>
+        <span class="hud-stat">Gold: <span>42</span></span>
+        <span class="ring-badge">RING 2</span>
+      </div>
+
+      <div class="hud-tab-strip">
+        <div class="tab-icon active">⚔</div>
+        <div class="tab-icon">🎒</div>
+        <div class="tab-icon">🗺</div>
+        <div class="tab-icon">📜</div>
+        <div class="tab-icon">👤</div>
+        <div class="tab-icon">⚙</div>
+      </div>
+
+      <div class="hud-drawer-panel">
+        <div class="drawer-label">Party</div>
+        <div class="party-member">
+          <div class="party-portrait" style="background-image:url(img/tiles/standard_rpg/portrait_human.png)"></div>
+          <div class="party-info">
+            <div class="pname">Kael Thornvast</div>
+            <div class="prace">Human Ranger</div>
+            <div class="hp-bar"><div class="hp-fill" style="width:78%"></div></div>
+          </div>
+        </div>
+        <div class="party-member">
+          <div class="party-portrait" style="background-image:url(img/tiles/standard_rpg/portrait_dwarf.png)"></div>
+          <div class="party-info">
+            <div class="pname">Brund Ironfoot</div>
+            <div class="prace">Dwarf Fighter</div>
+            <div class="hp-bar"><div class="hp-fill" style="width:55%;background:linear-gradient(90deg,#9a5a3c,#ca8a5a)"></div></div>
+          </div>
+        </div>
+        <div class="party-member">
+          <div class="party-portrait" style="background-image:url(img/tiles/standard_rpg/portrait_elf.png)"></div>
+          <div class="party-info">
+            <div class="pname">Sylvara</div>
+            <div class="prace">Elf Mage</div>
+            <div class="hp-bar"><div class="hp-fill" style="width:92%"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hud-narrative">
+        <div class="narrative-header">Narrative</div>
+        <div class="narrative-entry">The village of Thornwall emerges from the morning mist. Stone-cobbled streets wind between timber-framed buildings. A raven watches you from the inn's sign, unblinking.</div>
+        <div class="narrative-entry player">You head toward the marketplace.</div>
+        <div class="narrative-entry">The marketplace is alive with early trade. A dwarf merchant haggles loudly over the price of iron ingots while children chase a runaway chicken between the stalls. The smell of fresh bread drifts from somewhere to the east.</div>
+        <div class="intent-bar-sim">
+          <input class="intent-input-sim" type="text" placeholder="What do you do?" readonly>
+          <button class="intent-send-sim">Send</button>
+        </div>
+      </div>
+
+      <div class="hud-right-panel">
+        <div class="right-label">World &amp; Shops</div>
+        <div class="shop-keeper-area">
+          <div class="shopkeeper-sim"></div>
+          <div class="shop-info">
+            <div class="sname">Mira Copperweight</div>
+            <div class="srole">General Merchant</div>
+          </div>
+        </div>
+        <div class="right-label" style="margin-top:10px;">Nearby</div>
+        <div class="nearby-item"><span class="nearby-icon">🏠</span>The Weathered Flagon Inn</div>
+        <div class="nearby-item"><span class="nearby-icon">⚒</span>Stoneback Forge</div>
+        <div class="nearby-item"><span class="nearby-icon">📜</span>Guild Hall</div>
+        <div class="nearby-item"><span class="nearby-icon">🌿</span>Apothecary Roots</div>
+      </div>
+
+      <div class="hud-dock">
+        <div style="font-size:0.7em;color:#c0a060;text-transform:uppercase;letter-spacing:0.1em;margin-right:6px;position:relative;z-index:1;">Quick</div>
+        <div class="hotbar-slot-sim">1</div>
+        <div class="hotbar-slot-sim">2</div>
+        <div class="hotbar-slot-sim" style="background:rgba(90,154,60,0.15);border-color:rgba(90,154,60,0.3);color:#8aca5a;">🗡</div>
+        <div class="hotbar-slot-sim" style="background:rgba(90,154,60,0.15);border-color:rgba(90,154,60,0.3);color:#8aca5a;">🏹</div>
+        <div class="hotbar-slot-sim">5</div>
+        <div class="hotbar-slot-sim">6</div>
+        <div class="hotbar-slot-sim">7</div>
+        <div class="hotbar-slot-sim">8</div>
+        <button class="end-turn-btn-sim">End Turn</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 3: PORTRAITS -->
+<!-- ============================================================ -->
+<div class="section-label">Character Portraits</div>
+<div class="portrait-strip" id="portrait-strip"></div>
+
+<!-- ============================================================ -->
+<!-- SECTION 4: TILE SHEETS -->
+<!-- ============================================================ -->
+<div class="section-label">Tile Sheets (click to fullscreen)</div>
+<div class="tile-strip" id="tile-strip"></div>
+
+<!-- LIGHTBOX -->
+<div id="lb" onclick="closeLb()">
+  <span id="lb-x" onclick="closeLb()">x</span>
+  <img id="lb-img" src="" alt="">
+  <div id="lb-cap"></div>
+</div>
+
+<script>
+const PORTRAITS = [
+  ["portrait_human.png","Human","BASE"],
+  ["portrait_dwarf.png","Dwarf","BASE"],
+  ["portrait_elf.png","Elf","BASE"],
+  ["portrait_orc.png","Orc","BASE"],
+  ["portrait_rogue.png","Rogue/Halfling/Tiefling","BASE"],
+  ["portrait_mage.png","Mage/Gnome","BASE"],
+];
+
+const TILES = [
+  ["01_ground_grass.png","Ground Grass"],
+  ["02_ground_paths.png","Paths & Stone"],
+  ["03_ground_water.png","Water & Shores"],
+  ["04_trees_nature.png","Trees & Nature"],
+  ["05_rocks_cliffs.png","Rocks & Cliffs"],
+  ["06_buildings_village.png","Village Buildings"],
+  ["07_buildings_town.png","Town Buildings"],
+  ["08_town_objects.png","Town Objects"],
+  ["09_interior_floors.png","Interior Floors"],
+  ["10_interior_objects.png","Interior Objects"],
+  ["sprite_player.png","Player Sprite Sheet"],
+  ["sprite_npcs.png","NPC Sprites"],
+];
+
+const BASE_RACES = [
+  { code:"human",    name:"Human",    file:"portrait_human.png" },
+  { code:"dwarf",    name:"Dwarf",    file:"portrait_dwarf.png" },
+  { code:"elf",      name:"Elf",      file:"portrait_elf.png" },
+  { code:"orc",      name:"Orc",      file:"portrait_orc.png" },
+  { code:"halfling", name:"Halfling", file:"portrait_rogue.png" },
+  { code:"gnome",    name:"Gnome",    file:"portrait_mage.png" },
+  { code:"tiefling", name:"Tiefling", file:"portrait_rogue.png" },
+];
+
+const HYBRID_RACES = [
+  { code:"dwarf-elf",      name:"Dwarf / Elf",      p1:"dwarf",    p2:"elf" },
+  { code:"dwarf-human",    name:"Dwarf / Human",    p1:"dwarf",    p2:"human" },
+  { code:"elf-human",      name:"Elf / Human",      p1:"elf",      p2:"human" },
+  { code:"human-orc",      name:"Human / Orc",      p1:"human",    p2:"orc" },
+  { code:"elf-orc",        name:"Elf / Orc",        p1:"elf",      p2:"orc" },
+  { code:"halfling-human", name:"Halfling / Human", p1:"halfling", p2:"human" },
+  { code:"dwarf-halfling", name:"Dwarf / Halfling", p1:"dwarf",    p2:"halfling" },
+  { code:"halfling-orc",   name:"Halfling / Orc",   p1:"halfling", p2:"orc" },
+  { code:"gnome-human",    name:"Gnome / Human",    p1:"gnome",    p2:"human" },
+  { code:"elf-gnome",      name:"Elf / Gnome",      p1:"elf",      p2:"gnome" },
+  { code:"dwarf-gnome",    name:"Dwarf / Gnome",    p1:"dwarf",    p2:"gnome" },
+  { code:"gnome-halfling", name:"Gnome / Halfling", p1:"gnome",    p2:"halfling" },
+  { code:"gnome-orc",      name:"Gnome / Orc",      p1:"gnome",    p2:"orc" },
+  { code:"elf-halfling",   name:"Elf / Halfling",   p1:"elf",      p2:"halfling" },
+  { code:"elf-tiefling",   name:"Elf / Tiefling",   p1:"elf",      p2:"tiefling" },
+  { code:"human-tiefling", name:"Human / Tiefling", p1:"human",    p2:"tiefling" },
+  { code:"dwarf-tiefling", name:"Dwarf / Tiefling", p1:"dwarf",    p2:"tiefling" },
+  { code:"halfling-tiefling",name:"Halfling / Tiefling",p1:"halfling",p2:"tiefling"},
+  { code:"gnome-tiefling", name:"Gnome / Tiefling", p1:"gnome",    p2:"tiefling" },
+  { code:"orc-tiefling",   name:"Orc / Tiefling",   p1:"orc",      p2:"tiefling" },
+  { code:"dwarf-orc",      name:"Dwarf / Orc",      p1:"dwarf",    p2:"orc" },
+];
+
+function getPortrait(code) {
+  const m = BASE_RACES.find(r => r.code === code);
+  return m ? `img/tiles/standard_rpg/${m.file}` : "";
+}
+
+function lb(src, cap) {
+  document.getElementById("lb-img").src = src;
+  document.getElementById("lb-cap").textContent = cap;
+  document.getElementById("lb").classList.add("open");
+}
+function closeLb() { document.getElementById("lb").classList.remove("open"); }
+document.addEventListener("keydown", e => { if(e.key==="Escape") closeLb(); });
+
+// Build race grid
+const raceGrid = document.getElementById("race-grid");
+BASE_RACES.forEach(r => {
+  const div = document.createElement("div");
+  div.className = "race-tile";
+  div.onclick = () => lb(`img/tiles/standard_rpg/${r.file}`, r.name + " portrait");
+  div.innerHTML = `
+    <div class="race-tile-portrait" style="background-image:url(img/tiles/standard_rpg/${r.file})"></div>
+    <span class="race-tile-name">${r.name}</span>
+  `;
+  raceGrid.appendChild(div);
+});
+
+// Build hybrid grid
+const hybridGrid = document.getElementById("hybrid-grid");
+HYBRID_RACES.forEach(h => {
+  const p1 = getPortrait(h.p1);
+  const p2 = getPortrait(h.p2);
+  // Check if dedicated hybrid portrait exists
+  const hybridFile = `img/tiles/standard_rpg/hybrid_${h.code}.png`;
+  const div = document.createElement("div");
+  div.className = "hybrid-tile";
+  div.title = h.name;
+  div.innerHTML = `
+    <div class="hybrid-portrait-left" style="background-image:url(${p1})"></div>
+    <div class="hybrid-portrait-right" style="background-image:url(${p2})"></div>
+    <div class="hybrid-blend"></div>
+    <span class="hybrid-name">${h.name.replace(" / ", "/")}</span>
+  `;
+  // Try to load dedicated portrait if it exists
+  const img = new Image();
+  img.onload = () => {
+    div.innerHTML = `
+      <div class="race-tile-portrait" style="background-image:url(${hybridFile});opacity:0.65;"></div>
+      <span class="hybrid-name">${h.name.replace(" / ", "/")}</span>
+    `;
+  };
+  img.src = hybridFile;
+  hybridGrid.appendChild(div);
+});
+
+// Build portrait strip
+const portStrip = document.getElementById("portrait-strip");
+PORTRAITS.forEach(([file, name, tag]) => {
+  const card = document.createElement("div");
+  card.className = "portrait-card";
+  card.onclick = () => lb(`img/tiles/standard_rpg/${file}`, name);
+  card.innerHTML = `
+    <img src="img/tiles/standard_rpg/${file}" alt="${name}" loading="lazy">
+    <div class="portrait-card-label">${name} <span class="ptag">${tag}</span></div>
+  `;
+  portStrip.appendChild(card);
+});
+
+// Build tile strip
+const tileStrip = document.getElementById("tile-strip");
+TILES.forEach(([file, name]) => {
+  const card = document.createElement("div");
+  card.className = "tile-card";
+  card.onclick = () => lb(`img/tiles/standard_rpg/${file}`, name);
+  card.innerHTML = `
+    <img src="img/tiles/standard_rpg/${file}" alt="${name}" loading="lazy">
+    <div class="tile-card-label">${name}</div>
+  `;
+  tileStrip.appendChild(card);
+});
+</script>
+</body>
+</html>
