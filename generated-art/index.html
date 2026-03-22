@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TEN RINGS — Generated Art Gallery</title>
+<style>
+  :root {
+    --bg: #0d0d14;
+    --surface: #161624;
+    --border: #2a2a44;
+    --accent: #a78bfa;
+    --accent2: #f472b6;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+  header {
+    text-align: center;
+    padding: 56px 20px 40px;
+    background: linear-gradient(180deg, #1a0a2e 0%, var(--bg) 100%);
+    border-bottom: 1px solid var(--border);
+  }
+  header h1 {
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+  }
+  header p {
+    color: var(--muted);
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+  }
+  .badge {
+    display: inline-block;
+    margin-top: 14px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: rgba(167,139,250,0.12);
+    border: 1px solid rgba(167,139,250,0.3);
+    color: var(--accent);
+  }
+  .gallery {
+    max-width: 1400px;
+    margin: 50px auto 0;
+    padding: 0 24px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 28px;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 48px rgba(167,139,250,0.18);
+    border-color: var(--accent);
+  }
+  .card.featured {
+    grid-column: span 2;
+  }
+  @media (max-width: 760px) {
+    .card.featured { grid-column: span 1; }
+  }
+  .card-img {
+    width: 100%;
+    display: block;
+    aspect-ratio: auto;
+    max-height: 520px;
+    object-fit: cover;
+    object-position: top;
+    background: #0a0a16;
+  }
+  .card.portrait .card-img {
+    aspect-ratio: 2/3;
+    max-height: none;
+    object-position: top center;
+  }
+  .card-body {
+    padding: 18px 20px 20px;
+  }
+  .card-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .card-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+  .card-desc {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+  .card-meta {
+    margin-top: 12px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .tag {
+    font-size: 0.7rem;
+    padding: 3px 10px;
+    border-radius: 12px;
+    background: rgba(167,139,250,0.08);
+    border: 1px solid rgba(167,139,250,0.2);
+    color: var(--accent);
+  }
+  .tag.pink {
+    background: rgba(244,114,182,0.08);
+    border-color: rgba(244,114,182,0.2);
+    color: var(--accent2);
+  }
+
+  /* Lightbox */
+  #lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.92);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    cursor: zoom-out;
+  }
+  #lightbox.open { display: flex; }
+  #lightbox img {
+    max-width: 95vw;
+    max-height: 92vh;
+    border-radius: 12px;
+    box-shadow: 0 0 80px rgba(167,139,250,0.3);
+    cursor: default;
+  }
+  #lightbox-close {
+    position: fixed;
+    top: 20px; right: 28px;
+    font-size: 2rem;
+    color: #fff;
+    background: none;
+    border: none;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.15s;
+    line-height: 1;
+  }
+  #lightbox-close:hover { opacity: 1; }
+
+  footer {
+    text-align: center;
+    margin-top: 60px;
+    color: var(--muted);
+    font-size: 0.78rem;
+    letter-spacing: 0.03em;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>TEN RINGS &mdash; Generated Art</h1>
+  <p>AI-generated assets from today's session &mdash; characters, scenes, and environments</p>
+  <span class="badge">gpt-image-1 &bull; DALL-E 3 &bull; March 22, 2026</span>
+</header>
+
+<div class="gallery">
+
+  <!-- FEATURED: Gal-game character -->
+  <div class="card portrait featured" onclick="openLightbox('galstyle_tiefling_school.png')">
+    <img class="card-img" src="galstyle_tiefling_school.png" alt="Gal-game tiefling school character" loading="lazy">
+    <div class="card-body">
+      <div class="card-label">Character &bull; Visual Novel</div>
+      <div class="card-title">Tiefling/Human Hybrid &mdash; School Girl</div>
+      <div class="card-desc">
+        Gal-game / visual novel style full-body portrait. Lavender-tinted skin, small curved horns,
+        violet eyes. Classic Japanese school uniform with sailor collar, navy pleated skirt, knee socks.
+        Cherry blossom sidewalk, golden afternoon light.
+      </div>
+      <div class="card-meta">
+        <span class="tag pink">gpt-image-1</span>
+        <span class="tag">1024 &times; 1536</span>
+        <span class="tag">Gal-game</span>
+        <span class="tag">Tiefling/Human</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tiefling Orc in Park -->
+  <div class="card" onclick="openLightbox('tiefling_orc_in_park.png')">
+    <img class="card-img" src="tiefling_orc_in_park.png" alt="Tiefling orc hybrid in park" loading="lazy">
+    <div class="card-body">
+      <div class="card-label">Character &bull; Scene Integration</div>
+      <div class="card-title">Tiefling/Orc Hybrid &mdash; Park Sunset</div>
+      <div class="card-desc">
+        AI-edited character placed into the park sunset background using image editing.
+        Dusky green-grey skin, curved horns, traveler's cloak over leather armor.
+        Warm golden-hour lighting, cherry blossoms.
+      </div>
+      <div class="card-meta">
+        <span class="tag pink">gpt-image-1 edit</span>
+        <span class="tag">1024 &times; 1536</span>
+        <span class="tag">Tiefling/Orc</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Composited scene -->
+  <div class="card" onclick="openLightbox('composited_scene.png')">
+    <img class="card-img" src="composited_scene.png" alt="Composited scene" loading="lazy">
+    <div class="card-body">
+      <div class="card-label">Environment &bull; Composite</div>
+      <div class="card-title">City Heartlands &mdash; Character Composite</div>
+      <div class="card-desc">
+        Classic city background with a character composited onto the cobblestone walkway using PIL.
+        White-background removal, edge softening, proportional scaling to scene height.
+      </div>
+      <div class="card-meta">
+        <span class="tag">PIL composite</span>
+        <span class="tag">Heartlands</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Thornwood facade -->
+  <div class="card" onclick="openLightbox('bg_town_thornwood_styleref.png')">
+    <img class="card-img" src="bg_town_thornwood_styleref.png" alt="Thornwood gothic town facade" loading="lazy">
+    <div class="card-body">
+      <div class="card-label">Environment &bull; Town Facade</div>
+      <div class="card-title">Thornwood &mdash; Haunted Gothic Town</div>
+      <div class="card-desc">
+        Dark stone buildings with narrow windows, dead gnarled trees, iron lamp posts.
+        Generated with style-reference image editing — matching the existing facade art direction.
+        Cold blue-grey moody atmosphere.
+      </div>
+      <div class="card-meta">
+        <span class="tag pink">gpt-image-1 edit</span>
+        <span class="tag">1536 &times; 1024</span>
+        <span class="tag">Gothic</span>
+        <span class="tag">Facade</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Plains village facade -->
+  <div class="card" onclick="openLightbox('bg_village_plains_styleref.png')">
+    <img class="card-img" src="bg_village_plains_styleref.png" alt="Plains farming village facade" loading="lazy">
+    <div class="card-body">
+      <div class="card-label">Environment &bull; Village Facade</div>
+      <div class="card-title">Plains Village &mdash; Sunny Farmland</div>
+      <div class="card-desc">
+        Whitewashed stone cottages, wooden shutters, wide dirt road.
+        Hay bales, fenced garden plots, a water trough. Flat farmland and blue sky.
+        Style-matched to the desert facade reference.
+      </div>
+      <div class="card-meta">
+        <span class="tag pink">gpt-image-1 edit</span>
+        <span class="tag">1536 &times; 1024</span>
+        <span class="tag">Plains</span>
+        <span class="tag">Facade</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>TEN RINGS: A THOUSAND PATHS &bull; HoodieRat &bull; 2026</p>
+</footer>
+
+<!-- Lightbox -->
+<div id="lightbox" onclick="closeLightbox()">
+  <button id="lightbox-close" onclick="closeLightbox()">&times;</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script>
+  function openLightbox(src) {
+    document.getElementById('lightbox-img').src = src;
+    document.getElementById('lightbox').classList.add('open');
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+</script>
+</body>
+</html>
