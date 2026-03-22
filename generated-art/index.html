@@ -6,310 +6,200 @@
 <title>TEN RINGS — Generated Art Gallery</title>
 <style>
   :root {
-    --bg: #0d0d14;
-    --surface: #161624;
-    --border: #2a2a44;
-    --accent: #a78bfa;
-    --accent2: #f472b6;
-    --text: #e2e8f0;
-    --muted: #94a3b8;
+    --bg: #0d0d14; --surface: #161624; --border: #2a2a44;
+    --accent: #a78bfa; --accent2: #f472b6; --gold: #ffd700;
+    --text: #e2e8f0; --muted: #94a3b8;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Segoe UI', system-ui, sans-serif;
-    min-height: 100vh;
-    padding: 0 0 60px;
-  }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; padding: 0 0 60px; }
   header {
-    text-align: center;
-    padding: 56px 20px 40px;
+    text-align: center; padding: 56px 20px 40px;
     background: linear-gradient(180deg, #1a0a2e 0%, var(--bg) 100%);
     border-bottom: 1px solid var(--border);
   }
   header h1 {
-    font-size: clamp(1.8rem, 4vw, 3rem);
-    font-weight: 800;
-    letter-spacing: 0.04em;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 800; letter-spacing: 0.04em;
+    background: linear-gradient(135deg, var(--accent), var(--gold), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     margin-bottom: 10px;
   }
-  header p {
-    color: var(--muted);
-    font-size: 0.95rem;
-    letter-spacing: 0.02em;
-  }
-  .badge {
-    display: inline-block;
-    margin-top: 14px;
-    padding: 4px 14px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    background: rgba(167,139,250,0.12);
-    border: 1px solid rgba(167,139,250,0.3);
-    color: var(--accent);
-  }
-  .gallery {
-    max-width: 1400px;
-    margin: 50px auto 0;
-    padding: 0 24px;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-    gap: 28px;
-  }
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    overflow: hidden;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-  }
-  .card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 16px 48px rgba(167,139,250,0.18);
-    border-color: var(--accent);
-  }
-  .card.featured {
-    grid-column: span 2;
-  }
-  @media (max-width: 760px) {
-    .card.featured { grid-column: span 1; }
-  }
-  .card-img {
-    width: 100%;
-    display: block;
-    aspect-ratio: auto;
-    max-height: 520px;
-    object-fit: cover;
-    object-position: top;
-    background: #0a0a16;
-  }
-  .card.portrait .card-img {
-    aspect-ratio: 2/3;
-    max-height: none;
-    object-position: top center;
-  }
-  .card-body {
-    padding: 18px 20px 20px;
-  }
-  .card-label {
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 6px;
-  }
-  .card-title {
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 6px;
-    line-height: 1.3;
-  }
-  .card-desc {
-    font-size: 0.82rem;
-    color: var(--muted);
-    line-height: 1.55;
-  }
-  .card-meta {
-    margin-top: 12px;
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-  .tag {
-    font-size: 0.7rem;
-    padding: 3px 10px;
-    border-radius: 12px;
-    background: rgba(167,139,250,0.08);
-    border: 1px solid rgba(167,139,250,0.2);
-    color: var(--accent);
-  }
-  .tag.pink {
-    background: rgba(244,114,182,0.08);
-    border-color: rgba(244,114,182,0.2);
-    color: var(--accent2);
-  }
-
-  /* Lightbox */
-  #lightbox {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.92);
-    z-index: 1000;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    cursor: zoom-out;
-  }
+  header p { color: var(--muted); font-size: 0.95rem; }
+  .badges { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 14px; }
+  .badge { display: inline-block; padding: 4px 14px; border-radius: 20px; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; background: rgba(167,139,250,0.12); border: 1px solid rgba(167,139,250,0.3); color: var(--accent); }
+  .badge.gold { background: rgba(255,215,0,0.1); border-color: rgba(255,215,0,0.3); color: var(--gold); }
+  .badge.pink { background: rgba(244,114,182,0.1); border-color: rgba(244,114,182,0.3); color: var(--accent2); }
+  .gallery { max-width: 1400px; margin: 50px auto 0; padding: 0 24px; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 28px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s; }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(167,139,250,0.18); border-color: var(--accent); }
+  .card.portrait { grid-row: span 2; }
+  .card.wide { grid-column: span 2; }
+  @media (max-width: 700px) { .card.portrait, .card.wide { grid-column: span 1; grid-row: span 1; } }
+  .card-img { width: 100%; display: block; background: #0a0a16; }
+  .card.portrait .card-img { height: 520px; object-fit: cover; object-position: top; }
+  .card.wide .card-img { height: 260px; object-fit: cover; }
+  .card.regular .card-img { height: 220px; object-fit: cover; object-position: top; }
+  .card-body { padding: 18px 20px 20px; }
+  .card-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+  .card-label.gold { color: var(--gold); }
+  .card-label.pink { color: var(--accent2); }
+  .card-title { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .card-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.55; }
+  .tags { margin-top: 10px; display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag { font-size: 0.68rem; padding: 2px 9px; border-radius: 10px; background: rgba(167,139,250,0.08); border: 1px solid rgba(167,139,250,0.2); color: var(--accent); }
+  .tag.g { background: rgba(255,215,0,0.08); border-color: rgba(255,215,0,0.2); color: var(--gold); }
+  .tag.p { background: rgba(244,114,182,0.08); border-color: rgba(244,114,182,0.2); color: var(--accent2); }
+  .demo-banner { max-width: 1400px; margin: 40px auto 0; padding: 0 24px; }
+  .demo-box { background: linear-gradient(135deg, #1a0a2e, #0a1a2e); border: 1px solid rgba(167,139,250,0.3); border-radius: 16px; padding: 32px 36px; text-align: center; }
+  .demo-box h2 { font-size: 1.6rem; font-weight: 800; color: var(--accent); margin-bottom: 10px; }
+  .demo-box p { color: var(--muted); font-size: 0.9rem; margin-bottom: 24px; max-width: 500px; margin-left: auto; margin-right: auto; }
+  .btn-demo { display: inline-block; padding: 14px 40px; border-radius: 50px; text-decoration: none; background: linear-gradient(135deg, #a78bfa, #ffd700); color: #08070f; font-size: 1rem; font-weight: 800; letter-spacing: 0.06em; transition: transform 0.15s, box-shadow 0.15s; }
+  .btn-demo:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,215,0,0.35); }
+  #lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.93); z-index: 1000; align-items: center; justify-content: center; padding: 20px; cursor: zoom-out; }
   #lightbox.open { display: flex; }
-  #lightbox img {
-    max-width: 95vw;
-    max-height: 92vh;
-    border-radius: 12px;
-    box-shadow: 0 0 80px rgba(167,139,250,0.3);
-    cursor: default;
-  }
-  #lightbox-close {
-    position: fixed;
-    top: 20px; right: 28px;
-    font-size: 2rem;
-    color: #fff;
-    background: none;
-    border: none;
-    cursor: pointer;
-    opacity: 0.7;
-    transition: opacity 0.15s;
-    line-height: 1;
-  }
+  #lightbox img { max-width: 95vw; max-height: 92vh; border-radius: 12px; box-shadow: 0 0 80px rgba(167,139,250,0.3); cursor: default; }
+  #lightbox-close { position: fixed; top: 20px; right: 28px; font-size: 2rem; color: #fff; background: none; border: none; cursor: pointer; opacity: 0.7; transition: opacity 0.15s; }
   #lightbox-close:hover { opacity: 1; }
-
-  footer {
-    text-align: center;
-    margin-top: 60px;
-    color: var(--muted);
-    font-size: 0.78rem;
-    letter-spacing: 0.03em;
-  }
+  footer { text-align: center; margin-top: 60px; color: var(--muted); font-size: 0.78rem; }
 </style>
 </head>
 <body>
-
 <header>
-  <h1>TEN RINGS &mdash; Generated Art</h1>
-  <p>AI-generated assets from today's session &mdash; characters, scenes, and environments</p>
-  <span class="badge">gpt-image-1 &bull; DALL-E 3 &bull; March 22, 2026</span>
+  <h1>TEN RINGS — Generated Art</h1>
+  <p>All AI-generated assets from the TEN RINGS development session</p>
+  <div class="badges">
+    <span class="badge gold">gpt-image-1</span>
+    <span class="badge">DALL-E 3</span>
+    <span class="badge pink">PIL Composite</span>
+    <span class="badge">March 22, 2026</span>
+  </div>
 </header>
+
+<!-- Demo CTA -->
+<div class="demo-banner">
+  <div class="demo-box">
+    <h2>🎮 Play the Live Demo</h2>
+    <p>Walkable maps, side-view combat, power-up system, Sora cinematic videos, and original music.</p>
+    <a href="/demo" class="btn-demo">▶ Open Ten Rings Demo</a>
+  </div>
+</div>
 
 <div class="gallery">
 
-  <!-- FEATURED: Gal-game character -->
-  <div class="card portrait featured" onclick="openLightbox('galstyle_tiefling_school.png')">
-    <img class="card-img" src="galstyle_tiefling_school.png" alt="Gal-game tiefling school character" loading="lazy">
+  <!-- Gal-game character FEATURED -->
+  <div class="card portrait" onclick="openLightbox('galstyle_tiefling_school.png')">
+    <img class="card-img" src="galstyle_tiefling_school.png" alt="Gal-game tiefling school girl">
     <div class="card-body">
-      <div class="card-label">Character &bull; Visual Novel</div>
-      <div class="card-title">Tiefling/Human Hybrid &mdash; School Girl</div>
-      <div class="card-desc">
-        Gal-game / visual novel style full-body portrait. Lavender-tinted skin, small curved horns,
-        violet eyes. Classic Japanese school uniform with sailor collar, navy pleated skirt, knee socks.
-        Cherry blossom sidewalk, golden afternoon light.
-      </div>
-      <div class="card-meta">
-        <span class="tag pink">gpt-image-1</span>
-        <span class="tag">1024 &times; 1536</span>
-        <span class="tag">Gal-game</span>
-        <span class="tag">Tiefling/Human</span>
-      </div>
+      <div class="card-label pink">Character · Visual Novel</div>
+      <div class="card-title">School Girl — Tiefling/Human</div>
+      <div class="card-desc">gal-game protagonist. Lavender skin, curved horns, violet eyes, Japanese sailor uniform. Cherry blossoms and golden afternoon light.</div>
+      <div class="tags"><span class="tag p">gpt-image-1</span><span class="tag">1024×1536</span><span class="tag">Gal-game</span></div>
     </div>
   </div>
 
-  <!-- Tiefling Orc in Park -->
-  <div class="card" onclick="openLightbox('tiefling_orc_in_park.png')">
-    <img class="card-img" src="tiefling_orc_in_park.png" alt="Tiefling orc hybrid in park" loading="lazy">
+  <!-- Player combat sprite -->
+  <div class="card regular" onclick="openLightbox('pc_tiefling_combat.png')">
+    <img class="card-img" src="pc_tiefling_combat.png" alt="Tiefling combat sprite">
     <div class="card-body">
-      <div class="card-label">Character &bull; Scene Integration</div>
-      <div class="card-title">Tiefling/Orc Hybrid &mdash; Park Sunset</div>
-      <div class="card-desc">
-        AI-edited character placed into the park sunset background using image editing.
-        Dusky green-grey skin, curved horns, traveler's cloak over leather armor.
-        Warm golden-hour lighting, cherry blossoms.
-      </div>
-      <div class="card-meta">
-        <span class="tag pink">gpt-image-1 edit</span>
-        <span class="tag">1024 &times; 1536</span>
-        <span class="tag">Tiefling/Orc</span>
-      </div>
+      <div class="card-label gold">Character · Combat Sprite</div>
+      <div class="card-title">Hero — Side-View Combat</div>
+      <div class="card-desc">Tiefling/human hybrid in combat stance, facing right, sword raised. Anime cel-shaded, cave torchlight.</div>
+      <div class="tags"><span class="tag p">gpt-image-1</span><span class="tag">1024×1536</span><span class="tag">Combat</span></div>
     </div>
   </div>
 
-  <!-- Composited scene -->
-  <div class="card" onclick="openLightbox('composited_scene.png')">
-    <img class="card-img" src="composited_scene.png" alt="Composited scene" loading="lazy">
+  <!-- Werewolf NPC -->
+  <div class="card regular" onclick="openLightbox('npc_werewolf.png')">
+    <img class="card-img" src="npc_werewolf.png" alt="Werewolf NPC">
     <div class="card-body">
-      <div class="card-label">Environment &bull; Composite</div>
-      <div class="card-title">City Heartlands &mdash; Character Composite</div>
-      <div class="card-desc">
-        Classic city background with a character composited onto the cobblestone walkway using PIL.
-        White-background removal, edge softening, proportional scaling to scene height.
-      </div>
-      <div class="card-meta">
-        <span class="tag">PIL composite</span>
-        <span class="tag">Heartlands</span>
-      </div>
+      <div class="card-label" style="color:#f87171">NPC · Enemy · Side-View</div>
+      <div class="card-title">Werewolf — Mid-Transformation</div>
+      <div class="card-desc">Part man, part wolf. Hunched, claws extended, amber glowing eyes. Dark fur, tattered clothing. Cave torchlight from the left.</div>
+      <div class="tags"><span class="tag p">gpt-image-1</span><span class="tag">1024×1536</span><span class="tag">Enemy NPC</span></div>
     </div>
   </div>
 
-  <!-- Thornwood facade -->
-  <div class="card" onclick="openLightbox('bg_town_thornwood_styleref.png')">
-    <img class="card-img" src="bg_town_thornwood_styleref.png" alt="Thornwood gothic town facade" loading="lazy">
+  <!-- Cave combat BG -->
+  <div class="card wide" onclick="openLightbox('bg_cave_combat_street.png')">
+    <img class="card-img" src="bg_cave_combat_street.png" alt="Cave combat background">
     <div class="card-body">
-      <div class="card-label">Environment &bull; Town Facade</div>
-      <div class="card-title">Thornwood &mdash; Haunted Gothic Town</div>
-      <div class="card-desc">
-        Dark stone buildings with narrow windows, dead gnarled trees, iron lamp posts.
-        Generated with style-reference image editing — matching the existing facade art direction.
-        Cold blue-grey moody atmosphere.
-      </div>
-      <div class="card-meta">
-        <span class="tag pink">gpt-image-1 edit</span>
-        <span class="tag">1536 &times; 1024</span>
-        <span class="tag">Gothic</span>
-        <span class="tag">Facade</span>
-      </div>
+      <div class="card-label">Environment · Combat BG</div>
+      <div class="card-title">Cave — Street-Level Combat Background</div>
+      <div class="card-desc">Wide stone cave interior, stalactites, burning iron wall torches, dramatic orange-amber light pools, atmospheric blue-grey haze. Widescreen battle backdrop.</div>
+      <div class="tags"><span class="tag p">gpt-image-1</span><span class="tag">1536×1024</span><span class="tag">Cave</span><span class="tag">Combat BG</span></div>
     </div>
   </div>
 
-  <!-- Plains village facade -->
-  <div class="card" onclick="openLightbox('bg_village_plains_styleref.png')">
-    <img class="card-img" src="bg_village_plains_styleref.png" alt="Plains farming village facade" loading="lazy">
+  <!-- Power-up aura -->
+  <div class="card regular" onclick="openLightbox('fx_powerup_aura.png')">
+    <img class="card-img" src="fx_powerup_aura.png" alt="Power-up aura effect">
     <div class="card-body">
-      <div class="card-label">Environment &bull; Village Facade</div>
-      <div class="card-title">Plains Village &mdash; Sunny Farmland</div>
-      <div class="card-desc">
-        Whitewashed stone cottages, wooden shutters, wide dirt road.
-        Hay bales, fenced garden plots, a water trough. Flat farmland and blue sky.
-        Style-matched to the desert facade reference.
-      </div>
-      <div class="card-meta">
-        <span class="tag pink">gpt-image-1 edit</span>
-        <span class="tag">1536 &times; 1024</span>
-        <span class="tag">Plains</span>
-        <span class="tag">Facade</span>
-      </div>
+      <div class="card-label gold">VFX · Power-Up</div>
+      <div class="card-title">Arcane Aura — Power-Up Effect</div>
+      <div class="card-desc">Golden-white energy aura with crackling arcs and swirling particles. Universal — usable on any character. Saiyan-tier transformation energy.</div>
+      <div class="tags"><span class="tag g">gpt-image-1</span><span class="tag">1024×1024</span><span class="tag">VFX</span></div>
+    </div>
+  </div>
+
+  <!-- Composited scene WITH char -->
+  <div class="card regular" onclick="openLightbox('composited_scene.png')">
+    <img class="card-img" src="composited_scene.png" alt="City heartlands scene with character">
+    <div class="card-body">
+      <div class="card-label">Environment · Character</div>
+      <div class="card-title">City Heartlands — Hero Present</div>
+      <div class="card-desc">Classic city background with tiefling/human hero composited in. Leather armor, sword at hip, confident pose, naturally integrated.</div>
+      <div class="tags"><span class="tag p">gpt-image-1 edit</span><span class="tag">1536×1024</span></div>
+    </div>
+  </div>
+
+  <!-- Thornwood with char -->
+  <div class="card regular" onclick="openLightbox('bg_town_thornwood_styleref.png')">
+    <img class="card-img" src="bg_town_thornwood_styleref.png" alt="Thornwood with character">
+    <div class="card-body">
+      <div class="card-label">Environment · Town Facade</div>
+      <div class="card-title">Thornwood — Gothic Town (with Hero)</div>
+      <div class="card-desc">Dark stone gothic town. Hero stands in foreground against iron lampposts and gnarled dead trees. Cold blue-grey atmosphere.</div>
+      <div class="tags"><span class="tag p">gpt-image-1 edit</span><span class="tag">Gothic</span></div>
+    </div>
+  </div>
+
+  <!-- Plains village with char -->
+  <div class="card regular" onclick="openLightbox('bg_village_plains_styleref.png')">
+    <img class="card-img" src="bg_village_plains_styleref.png" alt="Plains village with character">
+    <div class="card-body">
+      <div class="card-label">Environment · Village Facade</div>
+      <div class="card-title">Plains Village — Sunny Farmland (with Hero)</div>
+      <div class="card-desc">Whitewashed stone cottages, wooden shutters, wide dirt road. Hero in foreground, flat farmland blue sky, warm afternoon light.</div>
+      <div class="tags"><span class="tag p">gpt-image-1 edit</span><span class="tag">Plains</span></div>
+    </div>
+  </div>
+
+  <!-- Tiefling orc in park -->
+  <div class="card regular" onclick="openLightbox('tiefling_orc_in_park.png')">
+    <img class="card-img" src="tiefling_orc_in_park.png" alt="Tiefling orc in park">
+    <div class="card-body">
+      <div class="card-label">Character · Scene</div>
+      <div class="card-title">Tiefling/Orc Hybrid — Park Sunset</div>
+      <div class="card-desc">Character placed into cherry blossom park via image editing. Dusky green-grey skin, curved horns, traveler's cloak. Golden-hour sunset.</div>
+      <div class="tags"><span class="tag p">gpt-image-1 edit</span><span class="tag">Tiefling/Orc</span></div>
     </div>
   </div>
 
 </div>
 
-<footer>
-  <p>TEN RINGS: A THOUSAND PATHS &bull; HoodieRat &bull; 2026</p>
-</footer>
-
-<!-- Lightbox -->
 <div id="lightbox" onclick="closeLightbox()">
   <button id="lightbox-close" onclick="closeLightbox()">&times;</button>
   <img id="lightbox-img" src="" alt="">
 </div>
 
+<footer><p>TEN RINGS: A Thousand Paths · HoodieRat · 2026</p></footer>
+
 <script>
-  function openLightbox(src) {
-    document.getElementById('lightbox-img').src = src;
-    document.getElementById('lightbox').classList.add('open');
-  }
-  function closeLightbox() {
-    document.getElementById('lightbox').classList.remove('open');
-  }
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+function openLightbox(src) {
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 </script>
 </body>
 </html>
