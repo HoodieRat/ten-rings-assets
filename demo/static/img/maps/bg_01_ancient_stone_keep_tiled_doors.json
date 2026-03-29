@@ -1,0 +1,296 @@
+[
+  {
+    "x": 272,
+    "y": 496,
+    "facing": "north",
+    "confidence": 1.0,
+    "type": "stairs_up"
+  },
+  {
+    "x": 2064,
+    "y": 1936,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": "stairs_down"
+  },
+  {
+    "x": 208,
+    "y": 1008,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": "exit"
+  },
+  {
+    "x": 272,
+    "y": 656,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": "locked"
+  },
+  {
+    "x": 240,
+    "y": 1520,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": ""
+  },
+  {
+    "x": 240,
+    "y": 1680,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": "exit"
+  },
+  {
+    "x": 240,
+    "y": 1776,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": "locked"
+  },
+  {
+    "x": 368,
+    "y": 336,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": ""
+  },
+  {
+    "x": 368,
+    "y": 560,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": "exit"
+  },
+  {
+    "x": 368,
+    "y": 1616,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": "locked"
+  },
+  {
+    "x": 400,
+    "y": 624,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": ""
+  },
+  {
+    "x": 400,
+    "y": 1136,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": "exit"
+  },
+  {
+    "x": 400,
+    "y": 1392,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": "locked"
+  },
+  {
+    "x": 400,
+    "y": 1776,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": ""
+  },
+  {
+    "x": 464,
+    "y": 1136,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": "exit"
+  },
+  {
+    "x": 464,
+    "y": 1392,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": "locked"
+  },
+  {
+    "x": 496,
+    "y": 464,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": ""
+  },
+  {
+    "x": 528,
+    "y": 1360,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": "exit"
+  },
+  {
+    "x": 560,
+    "y": 1936,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": "locked"
+  },
+  {
+    "x": 624,
+    "y": 560,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": ""
+  },
+  {
+    "x": 816,
+    "y": 720,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": "exit"
+  },
+  {
+    "x": 848,
+    "y": 1616,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": "locked"
+  },
+  {
+    "x": 1040,
+    "y": 1712,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": ""
+  },
+  {
+    "x": 1200,
+    "y": 336,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": "exit"
+  },
+  {
+    "x": 1200,
+    "y": 1616,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": "locked"
+  },
+  {
+    "x": 1360,
+    "y": 496,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": ""
+  },
+  {
+    "x": 1488,
+    "y": 336,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": "exit"
+  },
+  {
+    "x": 1520,
+    "y": 976,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": "locked"
+  },
+  {
+    "x": 1584,
+    "y": 1360,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": ""
+  },
+  {
+    "x": 1616,
+    "y": 1040,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": "exit"
+  },
+  {
+    "x": 1616,
+    "y": 1168,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": "locked"
+  },
+  {
+    "x": 1616,
+    "y": 1520,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": ""
+  },
+  {
+    "x": 1680,
+    "y": 976,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": "exit"
+  },
+  {
+    "x": 1712,
+    "y": 336,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": "locked"
+  },
+  {
+    "x": 1744,
+    "y": 1520,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": ""
+  },
+  {
+    "x": 1744,
+    "y": 1616,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": "exit"
+  },
+  {
+    "x": 1744,
+    "y": 1712,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": "locked"
+  },
+  {
+    "x": 1872,
+    "y": 496,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": ""
+  },
+  {
+    "x": 1904,
+    "y": 1424,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": "exit"
+  },
+  {
+    "x": 1904,
+    "y": 1584,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": "locked"
+  },
+  {
+    "x": 1936,
+    "y": 1936,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": ""
+  },
+  {
+    "x": 2064,
+    "y": 1776,
+    "facing": "south",
+    "confidence": 1.0,
+    "type": "exit"
+  }
+]

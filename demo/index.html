@@ -1,0 +1,736 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TEN RINGS: A Thousand Paths â€” Official Demo</title>
+<style>
+  :root {
+    --bg:        #08070f;
+    --surface:   #12101e;
+    --border:    #2a2644;
+    --accent:    #a78bfa;
+    --accent2:   #f472b6;
+    --gold:      #ffd700;
+    --text:      #e2e8f0;
+    --muted:     #94a3b8;
+    --danger:    #f87171;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+  }
+  section {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 24px;
+    position: relative;
+  }
+  /* â”€â”€ LOADING â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  #loading-screen {
+    position: fixed; inset: 0; z-index: 10000;
+    background: #08070f;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 24px;
+    transition: opacity 0.8s ease;
+  }
+  #loading-screen.fade-out { opacity: 0; pointer-events: none; }
+  .loader-title {
+    font-size: 2rem; font-weight: 800; letter-spacing: 0.1em;
+    background: linear-gradient(135deg, #a78bfa, #ffd700);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .progress-bar-wrap { width: 280px; height: 6px; background: #1e1b2e; border-radius: 3px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #a78bfa, #ffd700); border-radius: 3px; transition: width 0.3s ease; }
+  .loader-note { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.08em; }
+
+  /* â”€â”€ AUDIO GATE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  #audio-gate {
+    position: fixed; inset: 0; z-index: 9999;
+    background: rgba(8,7,15,0.94);
+    display: flex; align-items: center; justify-content: center;
+    display: none;
+  }
+  #audio-gate.visible { display: flex; }
+  .audio-gate-box {
+    text-align: center; padding: 48px 40px;
+    background: #12101e; border: 1px solid #2a2644; border-radius: 20px;
+    max-width: 400px;
+  }
+  .audio-gate-box h2 { font-size: 1.8rem; margin-bottom: 12px; color: var(--gold); }
+  .audio-gate-box p { color: var(--muted); font-size: 0.9rem; margin-bottom: 28px; line-height: 1.6; }
+  .btn-start {
+    padding: 14px 40px; border-radius: 50px; border: none; cursor: pointer;
+    background: linear-gradient(135deg, #a78bfa, #ffd700);
+    color: #08070f; font-size: 1.1rem; font-weight: 800; letter-spacing: 0.06em;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .btn-start:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(167,139,250,0.4); }
+
+  /* â”€â”€ SECTION A: INTRO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  #intro {
+    background: radial-gradient(ellipse at 50% 80%, #1a0a2e 0%, #08070f 70%);
+    text-align: center;
+    min-height: 100vh;
+  }
+  .intro-logo {
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    background: linear-gradient(135deg, #a78bfa 0%, #ffd700 50%, #f472b6 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+    margin-bottom: 12px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1.2s ease, transform 1.2s ease;
+  }
+  .intro-logo.visible { opacity: 1; transform: translateY(0); }
+  .intro-subtitle {
+    font-size: clamp(0.9rem, 2.5vw, 1.3rem);
+    color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase;
+    opacity: 0; transition: opacity 1s ease 0.6s;
+  }
+  .intro-subtitle.visible { opacity: 1; }
+  .typewriter-box {
+    margin-top: 40px;
+    max-width: 640px;
+    min-height: 80px;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text);
+    text-align: left;
+    font-style: italic;
+    opacity: 0;
+    transition: opacity 0.6s ease 1.2s;
+  }
+  .typewriter-box.visible { opacity: 1; }
+  #typewriter-text { }
+  .cursor { display: inline-block; width: 2px; height: 1.1em; background: var(--accent); vertical-align: middle; animation: blink 0.7s infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+  .scroll-hint {
+    position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+    color: var(--muted); font-size: 0.75rem; letter-spacing: 0.1em;
+    animation: float 2s ease-in-out infinite;
+  }
+  @keyframes float { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(6px)} }
+
+  /* â”€â”€ SECTION B: WALKABLE WORLD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  #world { background: #0a0814; }
+  #world h2 { font-size: 1.6rem; font-weight: 800; color: var(--accent); margin-bottom: 8px; letter-spacing: 0.04em; }
+  #world p { color: var(--muted); font-size: 0.88rem; margin-bottom: 20px; }
+  #world-canvas {
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    max-width: 100%;
+    cursor: crosshair;
+    box-shadow: 0 0 40px rgba(167,139,250,0.15);
+  }
+  .map-selector {
+    margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
+  }
+  .map-btn {
+    padding: 6px 16px; border-radius: 20px; cursor: pointer; font-size: 0.78rem;
+    background: #1a1730; border: 1px solid #2a2644; color: var(--muted);
+    transition: all 0.15s;
+  }
+  .map-btn:hover, .map-btn.active {
+    background: #2a2250; border-color: var(--accent); color: var(--accent);
+  }
+  .map-hint { margin-top: 10px; font-size: 0.72rem; color: var(--muted); letter-spacing: 0.06em; }
+
+  /* â”€â”€ SECTION C: CHARACTER REVEAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  #character { background: radial-gradient(ellipse at 50% 100%, #1a0a2e 0%, #08070f 70%); }
+  .char-reveal-wrap {
+    display: flex; align-items: center; gap: 60px; flex-wrap: wrap; justify-content: center; max-width: 900px;
+  }
+  .char-img-wrap {
+    position: relative;
+    opacity: 0; transform: translateX(-40px);
+    transition: opacity 1s ease, transform 1s ease;
+  }
+  .char-img-wrap.visible { opacity: 1; transform: translateX(0); }
+  .char-img {
+    width: 280px; max-width: 90vw;
+    border-radius: 16px;
+    box-shadow: 0 0 60px rgba(167,139,250,0.3), 0 0 120px rgba(167,139,250,0.1);
+  }
+  .char-info {
+    max-width: 380px;
+    opacity: 0; transform: translateX(40px);
+    transition: opacity 1s ease 0.3s, transform 1s ease 0.3s;
+  }
+  .char-info.visible { opacity: 1; transform: translateX(0); }
+  .char-info h2 { font-size: 2rem; font-weight: 900; color: var(--accent); margin-bottom: 8px; }
+  .char-info .subtitle { color: var(--accent2); font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 20px; }
+  .char-info p { color: var(--muted); line-height: 1.7; font-size: 0.95rem; margin-bottom: 16px; }
+  .stat-row { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 8px; }
+  .stat { text-align: center; }
+  .stat-val { font-size: 1.6rem; font-weight: 800; color: var(--gold); }
+  .stat-lbl { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.1em; }
+  .btn-powerup {
+    margin-top: 28px; padding: 12px 32px; border-radius: 50px; border: none; cursor: pointer;
+    background: linear-gradient(135deg, #a78bfa, #ffd700);
+    color: #08070f; font-size: 0.95rem; font-weight: 800; letter-spacing: 0.08em;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .btn-powerup:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,215,0,0.4); }
+
+  /* â”€â”€ SECTION D: COMBAT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  #combat { background: #070510; }
+  #combat h2 { font-size: 1.6rem; font-weight: 800; color: var(--danger); margin-bottom: 6px; }
+  #combat p  { color: var(--muted); font-size: 0.88rem; margin-bottom: 20px; }
+  #combat-canvas {
+    border: 2px solid #3f1c1c;
+    border-radius: 12px;
+    max-width: 100%;
+    box-shadow: 0 0 50px rgba(239,68,68,0.2);
+  }
+  .combat-controls { margin-top: 16px; display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+  .btn-combat {
+    padding: 10px 26px; border-radius: 50px; cursor: pointer; font-size: 0.85rem; font-weight: 700;
+    background: #1a0808; border: 1px solid #f87171; color: #f87171;
+    transition: all 0.15s;
+  }
+  .btn-combat:hover { background: #f87171; color: #07050f; }
+  .btn-combat.gold { border-color: var(--gold); color: var(--gold); background: #1a1408; }
+  .btn-combat.gold:hover { background: var(--gold); color: #07050f; }
+
+  /* â”€â”€ SECTION E: PROGRESSION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  #progression { background: #08070f; }
+  #progression h2 { font-size: 1.6rem; font-weight: 800; color: var(--text); margin-bottom: 8px; }
+  #progression .sub { color: var(--muted); font-size: 0.88rem; margin-bottom: 40px; text-align: center; }
+  .prog-cards { display: flex; gap: 28px; flex-wrap: wrap; justify-content: center; max-width: 960px; }
+  .prog-card {
+    background: #12101e; border: 1px solid #2a2644; border-radius: 16px;
+    padding: 28px 24px; width: 260px; text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  }
+  .prog-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(167,139,250,0.2); border-color: var(--accent); }
+  .prog-card .ring-badge {
+    display: inline-block; padding: 4px 14px; border-radius: 20px;
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .ring1 { background: rgba(167,139,250,0.12); border: 1px solid rgba(167,139,250,0.3); color: var(--accent); }
+  .ring2 { background: rgba(255,215,0,0.12); border: 1px solid rgba(255,215,0,0.3); color: var(--gold); }
+  .ring3 { background: rgba(244,114,182,0.12); border: 1px solid rgba(244,114,182,0.3); color: var(--accent2); }
+  .prog-card h3 { font-size: 1.1rem; font-weight: 800; margin-bottom: 10px; }
+  .prog-card p { color: var(--muted); font-size: 0.82rem; line-height: 1.6; }
+  .prog-card .feature-list { list-style: none; margin-top: 14px; }
+  .prog-card .feature-list li { color: var(--muted); font-size: 0.78rem; padding: 3px 0; }
+  .prog-card .feature-list li::before { content: 'âœ¦ '; color: var(--accent); }
+
+  /* â”€â”€ SECTION F: SORA VIDEOS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  #sora-videos { background: #080612; }
+  #sora-videos h2 { font-size: 1.6rem; font-weight: 800; color: var(--accent2); margin-bottom: 8px; }
+  #sora-videos .sub { color: var(--muted); font-size: 0.88rem; margin-bottom: 36px; text-align: center; }
+  .video-grid { display: flex; gap: 28px; flex-wrap: wrap; justify-content: center; max-width: 1000px; }
+  .video-card { background: #12101e; border: 1px solid #2a2644; border-radius: 16px; overflow: hidden; width: 440px; max-width: 100%; }
+  .video-card video { width: 100%; display: block; background: #000; }
+  .video-card-body { padding: 16px 18px 18px; }
+  .video-card-body h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
+  .video-card-body p { color: var(--muted); font-size: 0.78rem; line-height: 1.5; }
+  .video-placeholder {
+    height: 220px; background: #0d0a1a;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 10px;
+  }
+  .video-placeholder .spinner {
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 3px solid #2a2644; border-top-color: var(--accent);
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .video-placeholder p { color: var(--muted); font-size: 0.78rem; }
+
+  /* â”€â”€ SECTION G: CTA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  #cta {
+    background: radial-gradient(ellipse at 50% 0%, #2a1a4e 0%, #08070f 60%);
+    min-height: 60vh;
+    text-align: center;
+  }
+  #cta h2 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900; margin-bottom: 16px;
+    background: linear-gradient(135deg, #a78bfa, #ffd700); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  #cta p { color: var(--muted); font-size: 1rem; max-width: 480px; margin: 0 auto 40px; line-height: 1.7; }
+  .btn-play {
+    padding: 18px 56px; border-radius: 50px; border: none; cursor: pointer; text-decoration: none;
+    background: linear-gradient(135deg, #a78bfa, #ffd700);
+    color: #08070f; font-size: 1.2rem; font-weight: 900; letter-spacing: 0.08em;
+    box-shadow: 0 8px 32px rgba(167,139,250,0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: inline-block;
+  }
+  .btn-play:hover { transform: translateY(-4px) scale(1.04); box-shadow: 0 16px 48px rgba(255,215,0,0.4); }
+  .yt-link { display: block; margin-top: 20px; color: var(--muted); font-size: 0.8rem; text-decoration: none; }
+  .yt-link:hover { color: var(--accent2); }
+
+  /* â”€â”€ AUDIO PLAYER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  #audio-controls {
+    position: fixed; bottom: 18px; right: 18px; z-index: 1000;
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(18,16,30,0.9); border: 1px solid #2a2644;
+    border-radius: 50px; padding: 8px 16px;
+    backdrop-filter: blur(8px);
+  }
+  .audio-btn { background: none; border: none; cursor: pointer; color: var(--muted); font-size: 1.1rem; padding: 2px 4px; }
+  .audio-btn:hover { color: var(--accent); }
+  #audio-vol { width: 70px; accent-color: var(--accent); }
+  .now-playing { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.05em; white-space: nowrap; }
+</style>
+</head>
+<body>
+
+<!-- Loading screen -->
+<div id="loading-screen">
+  <div class="loader-title">TEN RINGS</div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-fill"></div></div>
+  <div class="loader-note" id="loader-note">Preparing your adventure...</div>
+</div>
+
+<!-- Audio gate -->
+<div id="audio-gate" class="visible">
+  <div class="audio-gate-box">
+    <h2>âš”ï¸ Ten Rings Awaits</h2>
+    <p>An epic adventure with original music.<br>Click below to enter with sound â€” or unmute after.</p>
+    <button class="btn-start" onclick="startWithAudio()">Enter the World</button>
+  </div>
+</div>
+
+<!-- Fixed audio controls -->
+<div id="audio-controls">
+  <button class="audio-btn" id="audio-toggle-btn" onclick="toggleAudio()">ðŸ”Š</button>
+  <input type="range" id="audio-vol" min="0" max="1" step="0.05" value="0.6" oninput="setVolume(this.value)">
+  <span class="now-playing">â™ª Duet</span>
+</div>
+
+<audio id="main-audio" loop preload="auto">
+  <source src="./static/audio/Duet.mp3" type="audio/mpeg">
+</audio>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     SECTION A: INTRO
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<section id="intro">
+  <div class="intro-logo" id="intro-logo">TEN RINGS</div>
+  <div class="intro-subtitle" id="intro-subtitle">A Thousand Paths</div>
+  <div class="typewriter-box" id="typewriter-box">
+    <span id="typewriter-text"></span><span class="cursor"></span>
+  </div>
+  <div class="scroll-hint">â†“ scroll to explore</div>
+</section>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     SECTION B: WALKABLE WORLD
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<section id="world">
+  <h2>ðŸ—ºï¸ Explore the World</h2>
+  <p>WASD or Arrow Keys to move â€” collision-aware walkable map</p>
+  <canvas id="world-canvas" width="768" height="512" tabindex="0"></canvas>
+  <div class="map-selector" id="map-selector"></div>
+  <div class="map-hint">[ Purple dot = your character Â· Green overlay = walkable zones ]</div>
+</section>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     SECTION C: CHARACTER REVEAL
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<section id="character">
+  <div class="char-reveal-wrap">
+    <div class="char-img-wrap" id="char-img-wrap">
+      <img class="char-img" id="char-img" src="./static/img/hero/ashborn_portrait.png"
+           alt="Ashborn Hero">
+    </div>
+    <div class="char-info" id="char-info">
+      <h2>Your Hero</h2>
+      <div class="subtitle">Ashborn</div>
+      <p>Born in the fracture-line where human resolve meets ringfire inheritance, she walks a path of her own choosing.</p>
+      <p>As you progress through the Ten Rings, her power grows â€” her combat evolves from gritty survival to breathtaking mastery.</p>
+      <div class="stat-row">
+        <div class="stat"><div class="stat-val">94</div><div class="stat-lbl">STR</div></div>
+        <div class="stat"><div class="stat-val">87</div><div class="stat-lbl">ARC</div></div>
+        <div class="stat"><div class="stat-val">76</div><div class="stat-lbl">AGI</div></div>
+        <div class="stat"><div class="stat-val">âˆž</div><div class="stat-lbl">WILL</div></div>
+      </div>
+      <button class="btn-powerup" id="powerup-btn" onclick="triggerHeroPowerUp()">âš¡ AWAKEN POWER</button>
+    </div>
+  </div>
+</section>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     SECTION D: COMBAT
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<section id="combat">
+  <h2>âš”ï¸ Combat</h2>
+  <p>From basic text combat (Ring 1) to full side-view action (Ring 2+) â€” fight grows as you do.</p>
+  <canvas id="combat-canvas" width="800" height="420" tabindex="0"></canvas>
+  <div class="combat-controls">
+    <button class="btn-combat" onclick="combatRound()">âš”ï¸ Attack</button>
+    <button class="btn-combat gold" onclick="triggerCombatPowerUp('player')">âš¡ Player Power Up</button>
+    <button class="btn-combat" style="border-color:#c084fc;color:#c084fc;" onclick="triggerCombatPowerUp('enemy')">ðŸº Enemy Transform</button>
+    <button class="btn-combat" onclick="resetCombat()">â†º Reset</button>
+  </div>
+</section>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     SECTION E: PROGRESSION
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<section id="progression">
+  <h2>Growing With You</h2>
+  <div class="sub">The world â€” and your power â€” evolves as you progress through the Ten Rings.</div>
+  <div class="prog-cards">
+    <div class="prog-card">
+      <div class="ring-badge ring1">Ring 1 â€” Awakening</div>
+      <h3>The Beginning</h3>
+      <p>Simple top-down exploration. Text-based combat. Learn who you are.</p>
+      <ul class="feature-list">
+        <li>Top-down walkable maps</li>
+        <li>Turn-based text combat</li>
+        <li>Basic character portrait</li>
+        <li>Simple enemy encounters</li>
+      </ul>
+    </div>
+    <div class="prog-card">
+      <div class="ring-badge ring2">Ring 2 â€” Rising</div>
+      <h3>The Awakening</h3>
+      <p>Side-view combat. Power-up system. Enemies evolve alongside you.</p>
+      <ul class="feature-list">
+        <li>Side-view action combat</li>
+        <li>Enemy power-up transformations</li>
+        <li>Aura &amp; glow effects</li>
+        <li>Animated attack sequences</li>
+      </ul>
+    </div>
+    <div class="prog-card">
+      <div class="ring-badge ring3">Ring 3+ â€” Ascension</div>
+      <h3>The Transcendence</h3>
+      <p>Full Saiyan-tier transformations. Cinematic combat. You become legend.</p>
+      <ul class="feature-list">
+        <li>Cinematic power sequences</li>
+        <li>Full screen-shake &amp; arcs</li>
+        <li>Multi-phase boss fights</li>
+        <li>Generative story outcomes</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     SECTION F: SORA VIDEOS
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<section id="sora-videos">
+  <h2>ðŸŽ¬ Cinematic Moments</h2>
+  <div class="sub">AI-generated video sequences from the world of Ten Rings (via Sora)</div>
+  <div class="video-grid">
+    <div class="video-card">
+      <div id="video-1-container">
+        <!-- Video will be injected here when Sora generation completes -->
+        <div class="video-placeholder">
+          <div class="spinner"></div>
+          <p>Generating: Walk Cycle...</p>
+          <p style="font-size:0.68rem;margin-top:4px;">Sora video in progress</p>
+        </div>
+      </div>
+      <div class="video-card-body">
+        <h3>The Walk Home</h3>
+        <p>Our hero strolls along a cherry blossom sidewalk â€” a quiet moment before the storm.</p>
+      </div>
+    </div>
+    <div class="video-card">
+      <div id="video-2-container">
+        <div class="video-placeholder">
+          <div class="spinner"></div>
+          <p>Generating: Power-Up Sequence...</p>
+          <p style="font-size:0.68rem;margin-top:4px;">Sora video in progress</p>
+        </div>
+      </div>
+      <div class="video-card-body">
+        <h3>The Awakening</h3>
+        <p>Deep in a cave â€” a golden aura erupts, the world trembles, and a warrior is reborn.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     SECTION G: CTA
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<section id="cta">
+  <h2>Your Path Awaits</h2>
+  <p>A world that grows with you. Combat that evolves. Power that you earn. Ten Rings is just beginning.</p>
+  <a href="/" class="btn-play">â–¶ Play Ten Rings</a>
+  <a href="https://www.youtube.com/watch?v=KuPqVBU7LaU" id="yt-link" class="yt-link" target="_blank">ðŸ“º Watch on YouTube</a>
+</section>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     SCRIPTS
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<script src="./static/js/walkable-maps-registry.js"></script>
+<script src="./static/js/walkable-explorer.js"></script>
+<script src="./static/js/powerup-system.js"></script>
+<script src="./static/js/combat-sideview.js"></script>
+<script>
+// â”€â”€ Audio â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+const audio = document.getElementById('main-audio');
+let audioStarted = false;
+
+function startWithAudio() {
+  document.getElementById('audio-gate').classList.remove('visible');
+  audio.volume = 0;
+  audio.play().then(() => {
+    audioStarted = true;
+    fadeAudio(0.6, 3000);
+  }).catch(() => {});
+}
+
+function fadeAudio(targetVol, durationMs) {
+  const steps = 30;
+  const startVol = audio.volume;
+  const diff = targetVol - startVol;
+  let i = 0;
+  const interval = setInterval(() => {
+    i++;
+    audio.volume = Math.max(0, Math.min(1, startVol + diff * (i / steps)));
+    if (i >= steps) clearInterval(interval);
+  }, durationMs / steps);
+}
+
+function toggleAudio() {
+  const btn = document.getElementById('audio-toggle-btn');
+  if (audio.paused) {
+    audio.play(); btn.textContent = 'ðŸ”Š';
+  } else {
+    audio.pause(); btn.textContent = 'ðŸ”‡';
+  }
+}
+
+function setVolume(v) {
+  audio.volume = parseFloat(v);
+}
+
+// Fade volume by section context
+const sectionVols = {
+  'intro': 0.55, 'world': 0.4, 'character': 0.5,
+  'combat': 0.8, 'progression': 0.45, 'sora-videos': 0.5, 'cta': 0.65,
+};
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting && audioStarted) {
+      const vol = sectionVols[e.target.id] || 0.55;
+      fadeAudio(vol, 800);
+    }
+  });
+}, { threshold: 0.4 });
+document.querySelectorAll('section').forEach(s => observer.observe(s));
+
+// â”€â”€ Loading â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+(function() {
+  const fill = document.getElementById('progress-fill');
+  const note = document.getElementById('loader-note');
+  const steps = [
+    [10, 'Loading world maps...'],
+    [25, 'Initializing walkable collision...'],
+    [45, 'Loading character sprites...'],
+    [65, 'Preparing combat engine...'],
+    [80, 'Composing the world...'],
+    [95, 'Almost ready...'],
+    [100, 'Welcome to Ten Rings'],
+  ];
+  let i = 0;
+  const tick = () => {
+    if (i >= steps.length) {
+      setTimeout(() => {
+        document.getElementById('loading-screen').classList.add('fade-out');
+        setTimeout(() => {
+          document.getElementById('loading-screen').style.display = 'none';
+          initDemo();
+        }, 800);
+      }, 400);
+      return;
+    }
+    const [pct, msg] = steps[i++];
+    fill.style.width = pct + '%';
+    note.textContent = msg;
+    setTimeout(tick, 300 + Math.random() * 200);
+  };
+  tick();
+})();
+
+// â”€â”€ Demo Init â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+let explorer, combat;
+
+async function initDemo() {
+  // Intro animations
+  setTimeout(() => document.getElementById('intro-logo').classList.add('visible'), 200);
+  setTimeout(() => document.getElementById('intro-subtitle').classList.add('visible'), 600);
+  setTimeout(() => {
+    document.getElementById('typewriter-box').classList.add('visible');
+    typewrite();
+  }, 1400);
+
+  // Init walkable explorer
+  await initWalkableWorld();
+
+  // Init combat
+  await initCombat();
+
+  // Intersection observers for char reveal
+  const charObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        document.getElementById('char-img-wrap').classList.add('visible');
+        document.getElementById('char-info').classList.add('visible');
+      }
+    });
+  }, { threshold: 0.3 });
+  charObserver.observe(document.getElementById('character'));
+
+  // Keyboard shortcuts
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Space' && !e.target.closest('canvas')) {
+      e.preventDefault();
+      combatRound();
+    }
+    if (e.code === 'Escape') {
+      document.getElementById('cta').scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+}
+
+// â”€â”€ Typewriter â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+const lore = `"The world was not broken by a single cataclysm â€” it unraveled, slowly, like a forgotten promise. They say there are ten rings of power, each hidden deeper than the last. Nobody who sought the tenth has ever returned. Until now."`;
+
+function typewrite() {
+  const el = document.getElementById('typewriter-text');
+  let i = 0;
+  const tick = () => {
+    el.textContent = lore.slice(0, ++i);
+    if (i < lore.length) setTimeout(tick, 30 + Math.random() * 20);
+  };
+  tick();
+}
+
+// â”€â”€ Walkable World â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+async function initWalkableWorld() {
+  const canvas = document.getElementById('world-canvas');
+  const maps   = window.WALKABLE_MAPS || [];
+  if (!maps.length) { console.warn('No walkable maps in registry.'); return; }
+
+  // Build map selector buttons
+  const sel = document.getElementById('map-selector');
+  maps.forEach((m, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'map-btn' + (idx === 0 ? ' active' : '');
+    btn.textContent = m.display_name;
+    btn.onclick = () => {
+      document.querySelectorAll('.map-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      loadMap(m.map_id);
+    };
+    sel.appendChild(btn);
+  });
+
+  explorer = new WalkableExplorer(canvas, maps[0].map_id, {
+    playerColor: '#a78bfa',
+    playerSize: 10,
+    showOverlay: true,
+    overlayOpacity: 0.22,
+    moveSpeed: 3,
+  });
+
+  try {
+    await explorer.load();
+    explorer.start();
+  } catch(e) {
+    console.warn('Explorer load failed:', e);
+  }
+}
+
+async function loadMap(mapId) {
+  if (!explorer) return;
+  explorer.stop();
+  explorer = new WalkableExplorer(
+    document.getElementById('world-canvas'),
+    mapId,
+    { playerColor: '#a78bfa', playerSize: 10, showOverlay: true, overlayOpacity: 0.22, moveSpeed: 3 }
+  );
+  try { await explorer.load(); explorer.start(); } catch(e) {}
+}
+
+// â”€â”€ Combat â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+async function initCombat() {
+  const canvas = document.getElementById('combat-canvas');
+  combat = new SideViewCombat(canvas, {
+    playerName:   'Hero',
+    enemyName:    'Werewolf',
+    playerHp:     120,
+    enemyHp:      100,
+    autoPlay:     false,
+  });
+  try { await combat.load(); } catch(e) { console.warn('Combat load failed:', e); }
+}
+
+function combatRound() {
+  if (!combat) return;
+  if (combat.state.result) { resetCombat(); return; }
+  combat.startRound();
+}
+
+function triggerCombatPowerUp(who) {
+  if (!combat) return;
+  combat.triggerPowerUp(who, who === 'player' ? 3 : 2);
+}
+
+function resetCombat() {
+  initCombat();
+}
+
+// â”€â”€ Hero Power-Up (Section C) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function triggerHeroPowerUp() {
+  const el = document.getElementById('char-img-wrap');
+  if (window.TenRings && window.TenRings.powerUp) {
+    window.TenRings.powerUp(el, { tier: 3, color: 'gold', duration_ms: 5000 });
+  }
+}
+
+// â”€â”€ Load Sora videos when available â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function loadVideoIfExists(containerId, videoSrc, fallbackText) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  if (container.querySelector('video')) return;
+  fetch(videoSrc, { method: 'HEAD' })
+    .then(r => {
+      if (r.ok) {
+        const video = document.createElement('video');
+        video.controls = true;
+        video.loop = false;
+        video.muted = true;
+        video.style.width = '100%';
+        video.innerHTML = `<source src="${videoSrc}" type="video/mp4">`;
+        container.innerHTML = '';
+        container.appendChild(video);
+      } else {
+        container.querySelector('.spinner') && (container.querySelector('p').textContent = fallbackText);
+      }
+    })
+    .catch(() => {});
+}
+
+setTimeout(() => {
+  // Try local server first, fallback to GitHub Pages
+  const base = '../videos';
+  loadVideoIfExists('video-1-container', `${base}/video_galstyle_school_walk.mp4`, 'Walk cycle video');
+  loadVideoIfExists('video-2-container', `${base}/video_tiefling_powerup_cave.mp4`, 'Power-up scene video');
+}, 1000);
+</script>
+</body>
+</html>
+
